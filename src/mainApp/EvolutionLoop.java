@@ -9,13 +9,12 @@ public class EvolutionLoop {
 	private Population population;
 	private ArrayList<Chromosome> updatedSet;
 	private ArrayList<Chromosome> curPop;
-	private int genomeLengthVal, mutationRateVal, numPop;
+	private int numPop;
 
 	public EvolutionLoop(int numPop, int genomeSize) {
 		this.population = new Population(numPop, genomeSize);
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
-		this.genomeLengthVal = genomeSize;
 		this.numPop = population.returnPopSize();
 
 	}
