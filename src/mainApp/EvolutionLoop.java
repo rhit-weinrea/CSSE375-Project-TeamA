@@ -151,9 +151,6 @@ public class EvolutionLoop {
 			updatedSet.add(chromToAdd1);
 			updatedSet.add(chromToAdd2);
 
-			// Adds new 50 mutates chromosomes to population
-			// System.out.println(chromToAdd.toString())
-
 		}
 
 		curPop = new ArrayList<>();
@@ -264,18 +261,5 @@ public class EvolutionLoop {
 		}
 		return lowest;
 	}
-
-	// Creates a hashmap for population
-
-	// Sorts population by fitness
-//	public void sort(ArrayList<Chromosome> pop) {
-//		Collections.sort(pop);
-//		
-//		System.out.println("sorted: " + sortedPop.toString());
-//		// return sortedPop;
-//
-//	}
-
-	// Test for EvolutionLoop.
 
 }
