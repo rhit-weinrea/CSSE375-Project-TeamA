@@ -1,12 +1,14 @@
 package mainApp;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -27,92 +29,92 @@ public class ChromosomeViewer {
 	public static final Dimension CHROMOSOME_VIEWER_SIZE = new Dimension(500, 500);
 	private double rateInput;
 
+	JFrame frame = new JFrame();
+	JPanel chromosomePanel = new JPanel();
+	JPanel buttonPanel = new JPanel();
+	JButton mutateButton = new JButton("Mutate");
+	JButton loadButton = new JButton("Load");
+	JButton saveButton = new JButton("Save");
+	JButton enterRateButton = new JButton("Enter");
+	
 	/**
 	 * This is the initial constructor of ChromosomeViewer which requires a file
 	 * from ChromosomesText to be input.
 	 *
 	 */
-	public ChromosomeViewer() throws FileNotFoundException {
-		this.rateInput = 0;
+	// public ChromosomeViewer() throws FileNotFoundException {
+	// 	this.rateInput = 0;
 
-		// Asks for a filename to be entered.
-		String filename = JOptionPane.showInputDialog("Enter Chromosome File:");
+	// 	Chromosome inputtedChromosome = getTypedChromosome();
 
-		// Converts the file of the given file name into a Chromosome.
-		ChromosomeGenerator chromosomeCreator = new ChromosomeGenerator(filename);
-		Chromosome chromosomeFromFile = chromosomeCreator.getChromosome();
+	// 	GridBagLayout grid = new GridBagLayout();
 
-		JFrame frame = new JFrame();
-		JPanel chromosomePanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
+	// 	// Sets up display grid.
+	// 	buttonPanel.setLayout(grid);
+	// 	chromosomePanel.setLayout(
+	// 			new GridLayout(inputtedChromosome.numberOfArrays(), inputtedChromosome.numberOfGenesInArray()));
 
-		GridBagLayout grid = new GridBagLayout();
+	// 			inputtedChromosome.drawOn(1, chromosomePanel);
 
-		// Sets up display grid.
-		buttonPanel.setLayout(grid);
-		chromosomePanel.setLayout(
-				new GridLayout(chromosomeFromFile.numberOfArrays(), chromosomeFromFile.numberOfGenesInArray()));
+	// 	JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
+	// 	JLabel label = new JLabel("Enter Mutation Rate  ");
 
-		chromosomeFromFile.drawOn(1, chromosomePanel);
+	// 	// ----------------------------------------------------------------------------------------------
+	// 	// Where buttons are given functionality
 
-		JButton mutateButton = new JButton("Mutate");
-		JButton loadButton = new JButton("Load");
-		JButton saveButton = new JButton("Save");
-		JButton enterRateButton = new JButton("Enter");
-		JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
-		JLabel label = new JLabel("Enter Mutation Rate  ");
+	// 	MutateListener mutateListener = new MutateListener(inputtedChromosome, frame, rateInput);
 
-		// ----------------------------------------------------------------------------------------------
-		// Where buttons are given functionality
+	// 	enterRateButton.addActionListener(new ActionListener() {
+	// 		@Override
+	// 		public void actionPerformed(ActionEvent e) {
+	// 			String rateInputString = rateInputBox.getText();
+	// 			System.out.println(rateInputString);
+	// 			rateInput = Double.parseDouble(rateInputString);
+	// 			mutateListener.setMutationRate(rateInput);
+	// 			System.out.println(rateInput);
+	// 			label.setText("Rate Entered");
+	// 		}
+	// 	});
 
-		MutateListener mutateListener = new MutateListener(chromosomeFromFile, frame, rateInput);
+	// 	mutateButton.addActionListener(mutateListener);
+	// 	loadButton.addActionListener(new LoadChromosomeFileListener());
+	// 	saveButton.addActionListener(new SaveChromosomeFileListener());
+	// 	// ----------------------------------------------------------------------------------------------
 
-		enterRateButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String rateInputString = rateInputBox.getText();
-				System.out.println(rateInputString);
-				rateInput = Double.parseDouble(rateInputString);
-				mutateListener.setMutationRate(rateInput);
-				System.out.println(rateInput);
-				label.setText("Rate Entered");
-			}
-		});
+	// 	buttonPanel.add(label);
+	// 	buttonPanel.add(rateInputBox);
+	// 	buttonPanel.add(enterRateButton);
+	// 	buttonPanel.add(mutateButton);
+	// 	buttonPanel.add(loadButton);
+	// 	buttonPanel.add(saveButton);
 
-		mutateButton.addActionListener(mutateListener);
-		loadButton.addActionListener(new LoadChromosomeFileListener());
-		saveButton.addActionListener(new SaveChromosomeFileListener());
-		// ----------------------------------------------------------------------------------------------
+	// 	frame.setSize(CHROMOSOME_VIEWER_SIZE);
+	// 	frame.setTitle("Chromosome Viewer");
 
-		buttonPanel.add(label);
-		buttonPanel.add(rateInputBox);
-		buttonPanel.add(enterRateButton);
-		buttonPanel.add(mutateButton);
-		buttonPanel.add(loadButton);
-		buttonPanel.add(saveButton);
+	// 	frame.add(buttonPanel, BorderLayout.SOUTH);
+	// 	frame.add(chromosomePanel, BorderLayout.NORTH);
 
-		frame.setSize(CHROMOSOME_VIEWER_SIZE);
-		frame.setTitle("Chromosome Viewer");
-
-		frame.add(buttonPanel, BorderLayout.SOUTH);
-		frame.add(chromosomePanel, BorderLayout.NORTH);
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
-	}
+	// 	frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	// 	frame.pack();
+	// 	frame.setVisible(true);
+	// }
 
 	/**
 	 * This is the constructor of ChromosomeViewer which allows chromosomes defined
 	 * by the program to be displayed.
 	 *
 	 */
-	public ChromosomeViewer(Chromosome chromosome, double mutationRate) {
+	public ChromosomeViewer(Chromosome inputChromosome, double mutationRate) {
+		Chromosome chromosome;
+		if(inputChromosome == null){
+			chromosome = getTypedChromosome();
+		}
+		else{
+			chromosome = inputChromosome;
+		}
 		this.rateInput = mutationRate;
 
-		JFrame frame = new JFrame();
-		JPanel chromosomePanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
+
 		JLabel label = new JLabel("Enter Mutation Rate  ");
 
 		GridBagLayout grid = new GridBagLayout();
@@ -123,10 +125,6 @@ public class ChromosomeViewer {
 
 		chromosome.drawOn(1, chromosomePanel);
 
-		JButton mutateButton = new JButton("Mutate");
-		JButton loadButton = new JButton("Load");
-		JButton saveButton = new JButton("Save");
-		JButton enterRateButton = new JButton("Enter");
 		JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
 
 		// ----------------------------------------------------------------------------------------------
@@ -141,7 +139,6 @@ public class ChromosomeViewer {
 				System.out.println(rateInputString);
 				rateInput = Double.parseDouble(rateInputString);
 				System.out.println(rateInput);
-				// System.out.println(chromosome.fitness);
 				mutateListener.setMutationRate(rateInput);
 				label.setText("Rate entered");
 			}
@@ -172,12 +169,6 @@ public class ChromosomeViewer {
 
 	public ChromosomeViewer(Chromosome chromosome) {
 
-		JFrame frame = new JFrame();
-		JPanel chromosomePanel = new JPanel();
-		JPanel buttonPanel = new JPanel();
-		JLabel label = new JLabel("Enter Mutation Rate  ");
-
-		GridBagLayout grid = new GridBagLayout();
 
 		// Sets up display grid.
 
@@ -195,6 +186,22 @@ public class ChromosomeViewer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
+	}
+
+	private void initializeJComponents(MutateListener mutateListener){
+
+	}
+
+	private Chromosome getTypedChromosome(){
+		String filename = JOptionPane.showInputDialog("Enter Chromosome File:");
+		ChromosomeGenerator generatorAtFile = null;
+            try {
+                generatorAtFile = new ChromosomeGenerator(filename);
+            } 
+			catch (FileNotFoundException ex) {
+            }
+		Chromosome chromosomeAtFile = generatorAtFile.getChromosome();
+		return chromosomeAtFile;
 	}
 
 }
