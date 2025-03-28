@@ -1,28 +1,36 @@
 package mainApp;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
 import java.util.ArrayList;
-
-import javax.swing.Timer;
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 public class EvolutionViewer {
 
 	static final int FRAME_WIDTH = 1800;
 	static final int FRAME_HEIGHT = 600;
 
-	private int genomeLengthVal, populationVal, numGenerationsVal, mutationRateVal, elitismNum, clicked, fitClick;
+	// private int genomeLengthVal, populationVal, numGenerationsVal, mutationRateVal, elitismNum, clicked, fitClick;
+	private int genomeLengthVal = 20;
+	private int populationVal = 100;
+	private int numGenerationsVal = 100;
+	private int mutationRateVal = 5;
+	private int elitismNum = 1;
+	private int clicked;
+	private int fitClick;
+
 	private String selectionType, evolveType;
 
 	// How long to wait in milliseconds between each step of the simulation
@@ -43,8 +51,8 @@ public class EvolutionViewer {
 		inputPanel.setLayout(grid);
 
 		ArrayList<Component> textFields = new ArrayList<Component>();
-
 		JTextField mutationRate = new JTextField("Enter Mutation Rate", 0);
+		removeTextOnClick(mutationRate);
 		JTextField numGenerations = new JTextField("Enter Number of Generations", 0);
 		JTextField population = new JTextField("Enter Population", 0);
 		JTextField genomeLength = new JTextField("Enter Genome Length", 0);
@@ -100,7 +108,6 @@ public class EvolutionViewer {
 
 				frame.repaint();
 				newComponent.repaint();
-				// new ChromosomeViewer(newComponent.fittest.get(ticks));
 				ticks++;
 
 			}
@@ -113,8 +120,9 @@ public class EvolutionViewer {
 				clicked++;
 				if (clicked == 1) {
 					enterButton.setText("Pause");
-
-					genomeLengthVal = Integer.parseInt(genomeLength.getText());
+					if(!genomeLength.getText().equals("Enter Mutation Rate")){
+						genomeLengthVal = Integer.parseInt(genomeLength.getText());
+					}
 					numGenerationsVal = Integer.parseInt(numGenerations.getText());
 					populationVal = Integer.parseInt(population.getText());
 					mutationRateVal = Integer.parseInt(mutationRate.getText());
@@ -188,7 +196,7 @@ public class EvolutionViewer {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ChromosomeViewer(newComponent.fittest.get(fitClick));
+				new ChromosomeViewer(newComponent.fittest.get(fitClick), 0.05);
 
 			}
 
@@ -199,6 +207,22 @@ public class EvolutionViewer {
 		frame.pack();
 		frame.setVisible(true);
 
+	}
+
+	private void removeTextOnClick(JTextField textField){
+		textField.addFocusListener(new FocusListener() {
+			String currentText = textField.getText();
+			@Override
+			public void focusGained(FocusEvent e) {
+				textField.setText("");
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {
+				textField.setText(currentText);
+			}
+
+		});
 	}
 
 }
