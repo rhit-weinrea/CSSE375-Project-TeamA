@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
 
+import mainApp.EvolutionLoop.SelectionType;
+
 @SuppressWarnings("serial")
 public class EvolutionComponent extends JComponent {
 
@@ -64,7 +66,8 @@ public class EvolutionComponent extends JComponent {
 	public void runTruncation(boolean crossoverOption, int mutate) {
 		if (crossoverOption) {
 			System.out.println("truncate");
-			evoLoop.truncationSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.TRUNCATION);
+			evoLoop.selection();
 			evoLoop.flipMutation(mutate);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -74,7 +77,8 @@ public class EvolutionComponent extends JComponent {
 
 		else {
 			System.out.println("truncate");
-			evoLoop.truncationSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.TRUNCATION);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -86,7 +90,8 @@ public class EvolutionComponent extends JComponent {
 	public void runRank(boolean crossoverOption, int mutate) {
 		if (crossoverOption) {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -96,7 +101,8 @@ public class EvolutionComponent extends JComponent {
 
 		else {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.flipMutation(mutate);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -108,7 +114,8 @@ public class EvolutionComponent extends JComponent {
 	public void runRoulette(boolean crossoverOption, int mutate) {
 		if (crossoverOption) {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -118,7 +125,8 @@ public class EvolutionComponent extends JComponent {
 		
 		else {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.flipMutation(mutate);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -130,7 +138,8 @@ public class EvolutionComponent extends JComponent {
 	public void runTruncationElite(boolean crossoverOption, int mutate, int n) {
 		if (crossoverOption) {
 			System.out.println("truncate");
-			evoLoop.truncationSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.TRUNCATION);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
@@ -141,7 +150,8 @@ public class EvolutionComponent extends JComponent {
 		
 		else {
 			System.out.println("truncate");
-			evoLoop.truncationSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.TRUNCATION);
+			evoLoop.selection();
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -155,7 +165,8 @@ public class EvolutionComponent extends JComponent {
 	public void runRankElite(boolean crossoverOption, int mutate, int n) {
 		if (crossoverOption) {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
@@ -166,7 +177,8 @@ public class EvolutionComponent extends JComponent {
 		
 		else {
 			System.out.println("rank");
-			evoLoop.rankSelection();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());
@@ -179,7 +191,8 @@ public class EvolutionComponent extends JComponent {
 	public void runRouletteElite(boolean crossoverOption, int mutate, int n) {
 		if (crossoverOption) {
 			System.out.println("roulette");
-			evoLoop.roulette();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.crossoverMutation(50);
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
@@ -190,7 +203,8 @@ public class EvolutionComponent extends JComponent {
 		
 		else {
 			System.out.println("roulette");
-			evoLoop.roulette();
+			evoLoop.changeSelectionStrategy(SelectionType.RANK);
+			evoLoop.selection();
 			evoLoop.elitism(mutate, n);
 			this.highFit.add(evoLoop.returnHighestAverage());
 			this.averageFit.add(evoLoop.returnAverage());

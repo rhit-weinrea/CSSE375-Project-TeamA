@@ -10,13 +10,20 @@ public class EvolutionLoop {
 	private ArrayList<Chromosome> updatedSet;
 	private ArrayList<Chromosome> curPop;
 	private int numPop;
+	private SelectionStrategy selectionStrategy;
 
 	public EvolutionLoop(int numPop, int genomeSize) {
 		this.population = new Population(numPop, genomeSize);
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
 		this.numPop = population.returnPopSize();
-
+		this.selectionStrategy = new RankSelection();
+	}
+	
+	enum SelectionType 
+	{
+		TRUNCATION,
+		RANK
 	}
 
 	class sortPop implements Comparator<Chromosome> {
@@ -38,106 +45,22 @@ public class EvolutionLoop {
 			System.out.println(curPop.get(i).fitness);
 		}
 	}
-
-	public void truncationSelection() {
-		Collections.sort(curPop, new sortPop());
-//		
-
-		ArrayList<Chromosome> toRemove = new ArrayList<Chromosome>();
-		int count = 0;
-		if (curPop.size() == numPop) {
-			for (int i = 0; i < curPop.size(); i++) {
-				if (count < (curPop.size() / 2)) {
-					toRemove.add(curPop.get(i));
-					count++;
-				}
-			}
+	
+	public void changeSelectionStrategy(SelectionType type) 
+	{
+		if(type == SelectionType.TRUNCATION) 
+		{
+			this.selectionStrategy = new TruncationSelection(numPop);
 		}
-
-		for (int j = 0; j < toRemove.size(); j++) {
-			curPop.remove(toRemove.get(j));
-
+		else if(type == SelectionType.RANK) 
+		{
+			this.selectionStrategy = new RankSelection();
 		}
 	}
-
-	public void rankSelection() {
-		Collections.sort(curPop, new sortPop());
-		double[] valuesArray = new double[curPop.size()];
-		Chromosome[] secondArray = new Chromosome[curPop.size()];
-		int total = 0;
-		double rankPercentSum = 0;
-
-		for (int i = 0; i < curPop.size() - 1; i++) {
-			total += i;
-		}
-
-		for (int i = 0; i < curPop.size(); i++) {
-			total += curPop.get(i).fitness;
-			double percentage = (double) i / (double) total;
-			rankPercentSum += percentage;
-			valuesArray[i] = rankPercentSum;
-			secondArray[i] = curPop.get(i);
-
-		}
-
-		curPop = new ArrayList<>();
-		for (int i = 0; i <= 50; i++) {
-			double chance = Math.random();
-			int beforeSize = curPop.size();
-			for (int j = 0; j < valuesArray.length; j++) {
-
-				if (valuesArray[j] > chance) {
-
-					curPop.add(secondArray[j]);
-					break;
-				}
-
-			}
-			if (curPop.size() == beforeSize) {
-				curPop.add(secondArray[secondArray.length - 1]);
-			}
-
-		}
-	}
-
-	public void roulette() {
-		Collections.sort(curPop, new sortPop());
-		double[] valuesArray = new double[curPop.size()];
-		Chromosome[] secondArray = new Chromosome[curPop.size()];
-		int total = 0;
-		double rankPercentSum = 0;
-
-		for (int i = 0; i < curPop.size() - 1; i++) {
-			total += curPop.get(i).fitness;
-		}
-
-		for (int i = 0; i < curPop.size(); i++) {
-			total += curPop.get(i).fitness;
-			double percentage = (double) i / (double) total;
-			rankPercentSum += percentage;
-			valuesArray[i] = rankPercentSum;
-			secondArray[i] = curPop.get(i);
-
-		}
-
-		curPop = new ArrayList<>();
-		for (int i = 0; i <= 50; i++) {
-			double chance = Math.random();
-			int beforeSize = curPop.size();
-			for (int j = 0; j < valuesArray.length; j++) {
-
-				if (valuesArray[j] > chance) {
-
-					curPop.add(secondArray[j]);
-					break;
-				}
-
-			}
-			if (curPop.size() == beforeSize) {
-				curPop.add(secondArray[secondArray.length - 1]);
-			}
-
-		}
+	
+	public void selection() 
+	{
+		curPop = selectionStrategy.select(curPop);
 	}
 
 	public void flipMutation(int mutate) {
