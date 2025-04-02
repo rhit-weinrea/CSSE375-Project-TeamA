@@ -6,17 +6,19 @@ import java.util.Comparator;
 
 public class EvolutionLoop {
 
-	private Population population;
+	private Chromosome[] population;
 	private ArrayList<Chromosome> updatedSet;
 	private ArrayList<Chromosome> curPop;
 	private int numPop;
 
 	public EvolutionLoop(int numPop, int genomeSize) {
-		this.population = new Population(numPop, genomeSize);
+		this.numPop = numPop;
+		this.population = new Chromosome[numPop];
+		for (int i = 0; i < numPop; i++) {
+			this.population[i] = new Chromosome(genomeSize);
+		}
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
-		this.numPop = population.returnPopSize();
-
 	}
 
 	class sortPop implements Comparator<Chromosome> {
@@ -26,12 +28,12 @@ public class EvolutionLoop {
 	}
 
 	public int returnGeneSize() {
-		return this.population.popArray[0].numberOfArrays() * this.population.popArray[0].numberOfGenesInArray();
+		return this.population[0].numberOfArrays() * this.population[0].numberOfGenesInArray();
 	}
 
 	public void createPop() {
 		for (int i = 0; i < this.numPop; i++) {
-			curPop.add(population.popArray[i]);
+			curPop.add(population[i]);
 		}
 
 		for (int i = 0; i < curPop.size(); i++) {
@@ -163,7 +165,7 @@ public class EvolutionLoop {
 	}
 
 	public void elitism(int mutate, int n) {
-		if (n == population.popSize) {
+		if (n == population.length) {
 			for (int i = 0; i < curPop.size(); i++) {
 				updatedSet.add(curPop.get(i));
 			}
