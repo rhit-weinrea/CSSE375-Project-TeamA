@@ -28,7 +28,8 @@ public class PopulationViewer {
 						(int) (population.get(0).numberOfGenes() * Math.pow(population.size(), 0.5))));
 
 		for (int j = 0; j < 100; j++) {
-			this.population.get(j).drawOn(2, populationPanel);
+
+			ChromosomeDrawer.drawShortPhenotype(this.population.get(j), populationPanel);
 		}
 
 		frame.setSize(POPULATION_VIEWER_SIZE);

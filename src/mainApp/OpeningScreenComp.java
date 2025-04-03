@@ -6,8 +6,6 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.FileNotFoundException;
-
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -55,11 +53,12 @@ public class OpeningScreenComp {
 		chromosomeViewerButton.addActionListener(new ActionListener() {
 
 			public void actionPerformed(ActionEvent e) {
-				try {
-					new ChromosomeViewer();
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
+				// try {
+				// 	new ChromosomeViewer();
+				// } catch (FileNotFoundException e1) {
+				// 	e1.printStackTrace();
+				// }
+				new ChromosomeViewer(null, 0);
 			}
 		});
 
