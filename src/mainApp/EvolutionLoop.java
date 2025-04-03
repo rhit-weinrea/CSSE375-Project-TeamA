@@ -17,13 +17,15 @@ public class EvolutionLoop {
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
 		this.numPop = population.returnPopSize();
-		this.selectionStrategy = new RankSelection();
+		this.selectionStrategy = new RankSelection(); //Default value
 	}
 	
-	enum SelectionType 
+	public enum SelectionType 
 	{
 		TRUNCATION,
-		RANK
+		RANK,
+		TOURNAMENT,
+		ROULETTE
 	}
 
 	class sortPop implements Comparator<Chromosome> {
@@ -55,6 +57,14 @@ public class EvolutionLoop {
 		else if(type == SelectionType.RANK) 
 		{
 			this.selectionStrategy = new RankSelection();
+		}
+		else if(type == SelectionType.ROULETTE) 
+		{
+			this.selectionStrategy = new RouletteSelection();
+		}
+		else if(type == SelectionType.TOURNAMENT) 
+		{
+			this.selectionStrategy = new TournamentSelection();
 		}
 	}
 	
@@ -95,7 +105,7 @@ public class EvolutionLoop {
 		else {
 
 			ArrayList<Chromosome> toRemove = new ArrayList<Chromosome>();
-			for (int i = curPop.size() - 1; i < curPop.size() - n; i--) {
+			for (int i = curPop.size() - 1; i > curPop.size() - n; i--) {
 				Chromosome chromToAdd1 = new Chromosome(curPop.get(i).geneticCode());
 				updatedSet.add(chromToAdd1);
 				toRemove.add(curPop.get(i));
@@ -107,11 +117,9 @@ public class EvolutionLoop {
 
 			for (int i = 0; i < curPop.size(); i++) {
 
-				Chromosome chromToAdd1 = new Chromosome(curPop.get(i).mutate3(mutate));
-				Chromosome chromToAdd2 = new Chromosome(curPop.get(i).mutate3(mutate));
+				Chromosome chromToAdd = new Chromosome(curPop.get(i).mutate3(mutate));
 
-				updatedSet.add(chromToAdd1);
-				updatedSet.add(chromToAdd2);
+				updatedSet.add(chromToAdd);
 
 			}
 		}
@@ -149,7 +157,6 @@ public class EvolutionLoop {
 
 	// returns average fitness for population
 	public int returnAverage() {
-		// System.out.println("Size = " + updatedSet.size());
 		int countForAverage = 0;
 		for (int i = 0; i < curPop.size(); i++) {
 			countForAverage += curPop.get(i).fitness;
