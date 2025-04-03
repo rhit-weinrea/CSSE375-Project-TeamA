@@ -57,7 +57,6 @@ public class EvolutionViewer {
 		JCheckBox terminateAtMaxButton = new JCheckBox("Terminate at Max Fitness?");
 		JCheckBox crossoverOption = new JCheckBox("Crossover?");
 
-		JButton seeFitChrom = new JButton("Show Fittest Chromosome");
 
 		String[] selectionChoices = { "Truncation", "Roulette", "Rank", "Tournament" };
 

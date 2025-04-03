@@ -20,7 +20,6 @@ public class EvolutionLoop {
 		}
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
-		this.numPop = population.returnPopSize();
 		this.selectionStrategy = new RankSelection(); //Default value
 	}
 	
