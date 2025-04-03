@@ -1,0 +1,30 @@
+package mainApp;
+
+import java.util.ArrayList;
+import java.util.Random;
+
+public class TournamentSelection extends SelectionStrategy {
+	
+	private Random r;
+	
+	public TournamentSelection() 
+	{
+		this.r = new Random();
+	}
+	
+	@Override
+	public ArrayList<Chromosome> select(ArrayList<Chromosome> curPop) 
+	{
+		ArrayList<Chromosome> sortedPop = super.select(curPop);
+		ArrayList<Chromosome> newPop = new ArrayList<Chromosome>();
+		
+		for(int i = 0; i < sortedPop.size()/2; i++) 
+		{
+			int indexIndividualOne = r.nextInt(0, sortedPop.size());
+			int indexIndividualTwo = r.nextInt(0, sortedPop.size());
+			newPop.add(sortedPop.get(Math.max(indexIndividualOne, indexIndividualTwo)));
+		}
+		
+		return newPop;
+	}
+}

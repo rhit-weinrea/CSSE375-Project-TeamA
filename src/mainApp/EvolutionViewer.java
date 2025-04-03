@@ -10,6 +10,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.Timer;
+
+import mainApp.EvolutionLoop.SelectionType;
+
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
@@ -54,7 +57,8 @@ public class EvolutionViewer {
 		JCheckBox terminateAtMaxButton = new JCheckBox("Terminate at Max Fitness?");
 		JCheckBox crossoverOption = new JCheckBox("Crossover?");
 
-		String[] selectionChoices = { "Truncation", "Roulette", "Rank" };
+
+		String[] selectionChoices = { "Truncation", "Roulette", "Rank", "Tournament" };
 
 		final JComboBox<String> cb = new JComboBox<String>(selectionChoices);
 
@@ -123,51 +127,32 @@ public class EvolutionViewer {
 					elitismNum = Integer.parseInt(elitismNumButton.getText());
 					newComponent.genSize = numGenerationsVal;
 					newComponent.startUp(populationVal, genomeLengthVal);
+					SelectionType selectionStrategy = SelectionType.TRUNCATION; //Default value
+					int numElites = 0;
 
 					if (selectionType.equals("Truncation")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runTruncation(crossoverOption.isSelected(), mutationRateVal);
-							}
-
-						}
-						if (evolveType.equals("Elitism")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runTruncationElite(crossoverOption.isSelected(), mutationRateVal,
-										elitismNum);
-							}
-						}
+						selectionStrategy = SelectionType.TRUNCATION;
+					}
+					else if (selectionType.equals("Roulette")) {
+						selectionStrategy = SelectionType.ROULETTE;
+					}
+					else if (selectionType.equals("Rank")) {
+						selectionStrategy = SelectionType.RANK;
+					}
+					else if(selectionType.equals("Tournament")) 
+					{
+						selectionStrategy = SelectionType.TOURNAMENT;
+					}
+					
+					if(evolveType.equals("Elitism")) 
+					{
+						numElites = elitismNum;
 					}
 
-					if (selectionType.equals("Roulette")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRoulette(crossoverOption.isSelected(), mutationRateVal);
-							}
-
-						}
-						if (evolveType.equals("Elitism")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRouletteElite(crossoverOption.isSelected(), mutationRateVal,
-										elitismNum);
-							}
-						}
+					for (int i = 0; i < numGenerationsVal; i++) {
+						newComponent.run(crossoverOption.isSelected(), mutationRateVal, numElites, selectionStrategy);
 					}
-
-					if (selectionType.equals("Rank")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRank(crossoverOption.isSelected(), mutationRateVal);
-							}
-						}
-
-						if (evolveType.equals("Elitism")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRankElite(crossoverOption.isSelected(), mutationRateVal, elitismNum);
-							}
-						}
-					}
-
+					
 					t.start();
 					clicked++;
 				}

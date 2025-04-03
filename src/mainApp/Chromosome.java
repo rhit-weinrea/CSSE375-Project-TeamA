@@ -263,58 +263,6 @@ public class Chromosome {
 
 	}
 
-	public int calculateBorderFitness() {
-		int count = 0;
-		for (int i = 0; i < this.numberOfArrays; i++) {
-			for (int j = 0; j < this.numberOfGenesInArray; j++) {
-				if (i == 0 || j == 0 || i == this.numberOfArrays - 1 || j == this.numberOfGenesInArray - 1) {
-					count += this.geneticCode[i][j];
-				}
-			}
-		}
-		return count;
-	}
-
-	/**
-	 * Quantifies the difference between two Chromosome's genetic code.
-	 * 
-	 * @author akamahwa
-	 *
-	 */
-	public int calculateHammingDistance(Chromosome otherChromosome) {
-		int hammingDistance = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				if (this.geneticCode[j][k] != otherChromosome.geneticCode[j][k]) {
-					hammingDistance++;
-				}
-			}
-		}
-		return hammingDistance;
-	}
-
-	/**
-	 * Quantifies the similarity between two Chromosome's genetic code.
-	 * 
-	 * @author akamahwa
-	 *
-	 */
-	int calculateInverseHammingDistance(Chromosome otherChromosome) {
-		int inverseHammingDistance = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				if (this.geneticCode[j][k] == otherChromosome.geneticCode[j][k]) {
-					inverseHammingDistance++;
-				}
-			}
-		}
-		return inverseHammingDistance;
-	}
-
-	public int calculateFitnessMatchOtherChromosome(Chromosome perfectSpecimen) {
-		return 100 * this.calculateHammingDistance(perfectSpecimen) / this.numberOfGenes();
-	}
-
 	private boolean checkIfPerfectSquare(int n) {
 		int roundedSquareRoot = (int) Math.sqrt(n);
 		return Math.pow(roundedSquareRoot, 2) == n;
