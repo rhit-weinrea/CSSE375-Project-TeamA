@@ -30,11 +30,12 @@ public class EvolutionViewer {
 	public EvolutionViewer() {
 		JFrame frame = new JFrame();
 		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, genomeLengthVal), populationVal);
+		ComponentPainter componentPainter = new ComponentPainter(newComponent);
 		GridBagLayout grid = new GridBagLayout();
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(grid);
 		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);
-		frame.add(newComponent, BorderLayout.CENTER);
+		frame.add(componentPainter, BorderLayout.CENTER);
 		initializeTextFieldToDefault();
 
 		Timer t = new Timer(DELAY, new ActionListener() {
@@ -51,7 +52,7 @@ public class EvolutionViewer {
 					}
 				}
 				frame.repaint();
-				newComponent.repaint();
+				componentPainter.repaint();
 				ticks++;
 			}
 		});
