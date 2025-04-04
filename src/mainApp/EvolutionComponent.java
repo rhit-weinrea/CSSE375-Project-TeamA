@@ -31,9 +31,20 @@ public class EvolutionComponent extends JComponent {
 	public ArrayList<Integer> lowFit;
 	public ArrayList<Chromosome> fittest;
 
+//	public EvolutionComponent1(EvolutionLoop evoLoop, int numPop) {
+//		this.setPreferredSize(new Dimension(EvolutionViewer.FRAME_WIDTH, STATS_HEIGHT));
+//		//this.evoLoop = new EvolutionLoop(numPop);
+//		this.lowFit = new ArrayList<Integer>();
+//		this.averageFit = new ArrayList<Integer>();
+//		this.highFit = new ArrayList<Integer>();
+//		this.updated = new HashMap<Integer, Integer>();
+//		//this.image = ImageIO.read(new File("darwin.jpg"));
+//	}
 
 	public EvolutionComponent(EvolutionLoop evoLoop2, int populationVal) {
+		// TODO Auto-generated constructor stub
 		this.setPreferredSize(new Dimension(FRAME_WIDTH, STATS_HEIGHT));
+		// this.evoLoop = new EvolutionLoop(numPop);
 		this.lowFit = new ArrayList<Integer>();
 		this.averageFit = new ArrayList<Integer>();
 		this.highFit = new ArrayList<Integer>();
@@ -49,20 +60,19 @@ public class EvolutionComponent extends JComponent {
 	// Adds values from evolution loop
 	public void startUp(int numPop, int genomeSize) {
 		this.evoLoop = new EvolutionLoop(numPop, genomeSize);
+		evoLoop.createPop();
 
 	}
 	
-	public EvolutionLoop getEvoLoop() 
-	{
-		return evoLoop;
-	}
 	public EvolutionLoop getLoop() 
 	{
-		return evoLoop;
+		return this.evoLoop;
 	}
 
 	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy) 
 	{
+		evoLoop.changeSelectionStrategy(selectionStrategy);
+		evoLoop.selection();
 		
 		if(numElites == 0) 
 		{
@@ -72,15 +82,21 @@ public class EvolutionComponent extends JComponent {
 		{
 			runElitism(crossoverOption, mutate, numElites);
 		}
+		this.highFit.add(evoLoop.returnHighestAverage());
+		this.averageFit.add(evoLoop.returnAverage());
+		this.lowFit.add(evoLoop.returnLowestAverage());
+		this.fittest.add(evoLoop.returnFittest());
 	}
 	
 	public void runNoElitism(boolean crossoverOption, int mutate) 
 	{
 		if (crossoverOption) 
 		{
+			evoLoop.flipMutation(mutate);
 		}
 		else
 		{
+			evoLoop.crossoverMutation(50);
 		}
 	}
 	
@@ -88,8 +104,10 @@ public class EvolutionComponent extends JComponent {
 	{
 		if (crossoverOption) 
 		{
+			evoLoop.crossoverMutation(50);
 		}
 		
+		evoLoop.elitism(mutate, numElites);
 	}
 
 	/**
@@ -179,4 +197,5 @@ public class EvolutionComponent extends JComponent {
 		}
 
 	}
+
 }
