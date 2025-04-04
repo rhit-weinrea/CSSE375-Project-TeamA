@@ -56,7 +56,7 @@ public class ChromosomeViewer {
 		buttonPanel.setLayout(grid);
 		chromosomePanel.setLayout(new GridLayout(chromosome.numberOfArrays(), chromosome.numberOfGenesInArray()));
 
-		chromosome.drawOn(1, chromosomePanel);
+		ChromosomeDrawer.drawLongPhenotype(chromosome, chromosomePanel);
 
 		JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
 
@@ -99,7 +99,6 @@ public class ChromosomeViewer {
 		frame.pack();
 		frame.setVisible(true);
 	}
-
 
 	private Chromosome getTypedChromosome(){
 		String filename = JOptionPane.showInputDialog("Enter Chromosome File:");

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+
 import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -67,45 +68,30 @@ public class EvolutionViewer {
 					evolveType = viewerSwingComponents.evolveTypeBox.getSelectedItem().toString();
 					newComponent.genSize = numGenerationsVal;
 					newComponent.startUp(populationVal, genomeLengthVal);
+					SelectionType selectionStrategy = SelectionType.TRUNCATION; //Default value
+					int numElites = 0;
 
 					if (selectionType.equals("Truncation")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runTruncation(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal);
-							}
-						}
-						else{
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runTruncationElite(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal,
-								numEliteIndivVal);
-							}
-						}
+						selectionStrategy = SelectionType.TRUNCATION;
 					}
 					else if (selectionType.equals("Roulette")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRoulette(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal);
-							}
-
-						}
-						else{
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRouletteElite(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal,
-								numEliteIndivVal);
-							}
-						}
+						selectionStrategy = SelectionType.ROULETTE;
 					}
 					else if (selectionType.equals("Rank")) {
-						if (evolveType.equals("Regular")) {
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRank(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal);
-							}
-						}
-						else{
-							for (int i = 0; i < numGenerationsVal; i++) {
-								newComponent.runRankElite(EvoViewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numEliteIndivVal);
-							}
-						}
+						selectionStrategy = SelectionType.RANK;
+					}
+					else if(selectionType.equals("Tournament")) 
+					{
+						selectionStrategy = SelectionType.TOURNAMENT;
+					}
+					
+					if(evolveType.equals("Elitism")) 
+					{
+						numElites = elitismNum;
+					}
+
+					for (int i = 0; i < numGenerationsVal; i++) {
+						newComponent.run(crossoverOption.isSelected(), mutationRateVal, numElites, selectionStrategy);
 					}
 					t.start();
 					clicked++;

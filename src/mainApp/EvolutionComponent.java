@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
 
+import mainApp.EvolutionLoop.SelectionType;
+
 @SuppressWarnings("serial")
 public class EvolutionComponent extends JComponent {
 
@@ -61,143 +63,51 @@ public class EvolutionComponent extends JComponent {
 		evoLoop.createPop();
 
 	}
+	
+	public EvolutionLoop getLoop() 
+	{
+		return this.evoLoop;
+	}
 
-	public void runTruncation(boolean crossoverOption, int mutate) {
-		if (crossoverOption) {
-			System.out.println("truncate");
-			evoLoop.truncationSelection();
+	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy) 
+	{
+		evoLoop.changeSelectionStrategy(selectionStrategy);
+		evoLoop.selection();
+		
+		if(numElites == 0) 
+		{
+			runNoElitism(crossoverOption, mutate);
+		}
+		else 
+		{
+			runElitism(crossoverOption, mutate, numElites);
+		}
+		this.highFit.add(evoLoop.returnHighestAverage());
+		this.averageFit.add(evoLoop.returnAverage());
+		this.lowFit.add(evoLoop.returnLowestAverage());
+		this.fittest.add(evoLoop.returnFittest());
+	}
+	
+	public void runNoElitism(boolean crossoverOption, int mutate) 
+	{
+		if (crossoverOption) 
+		{
 			evoLoop.flipMutation(mutate);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
 		}
-
-		else {
-			System.out.println("truncate");
-			evoLoop.truncationSelection();
+		else
+		{
 			evoLoop.crossoverMutation(50);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
 		}
 	}
-
-	public void runRank(boolean crossoverOption, int mutate) {
-		if (crossoverOption) {
-			System.out.println("rank");
-			evoLoop.rankSelection();
+	
+	public void runElitism(boolean crossoverOption, int mutate, int numElites) 
+	{
+		if (crossoverOption) 
+		{
 			evoLoop.crossoverMutation(50);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-
-		else {
-			System.out.println("rank");
-			evoLoop.rankSelection();
-			evoLoop.flipMutation(mutate);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-	}
-
-	public void runRoulette(boolean crossoverOption, int mutate) {
-		if (crossoverOption) {
-			System.out.println("rank");
-			evoLoop.rankSelection();
-			evoLoop.crossoverMutation(50);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
 		}
 		
-		else {
-			System.out.println("rank");
-			evoLoop.rankSelection();
-			evoLoop.flipMutation(mutate);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-	}
-
-	public void runTruncationElite(boolean crossoverOption, int mutate, int n) {
-		if (crossoverOption) {
-			System.out.println("truncate");
-			evoLoop.truncationSelection();
-			evoLoop.crossoverMutation(50);
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-		
-		else {
-			System.out.println("truncate");
-			evoLoop.truncationSelection();
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-		
-
-	}
-
-	public void runRankElite(boolean crossoverOption, int mutate, int n) {
-		if (crossoverOption) {
-			System.out.println("rank");
-			evoLoop.rankSelection();
-			evoLoop.crossoverMutation(50);
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-		
-		else {
-			System.out.println("rank");
-			evoLoop.rankSelection();
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-
-	}
-
-	public void runRouletteElite(boolean crossoverOption, int mutate, int n) {
-		if (crossoverOption) {
-			System.out.println("roulette");
-			evoLoop.roulette();
-			evoLoop.crossoverMutation(50);
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
-		
-		else {
-			System.out.println("roulette");
-			evoLoop.roulette();
-			evoLoop.elitism(mutate, n);
-			this.highFit.add(evoLoop.returnHighestAverage());
-			this.averageFit.add(evoLoop.returnAverage());
-			this.lowFit.add(evoLoop.returnLowestAverage());
-			this.fittest.add(evoLoop.returnFittest());
-		}
+		evoLoop.elitism(mutate, numElites);
 	}
 
 	/**
@@ -255,16 +165,6 @@ public class EvolutionComponent extends JComponent {
 		g2.drawString("Number of Generations", this.getWidth() / 2 - offsetX, offsetY + textOffsetY * 9);
 
 		if (highFit.size() > 0 && i < highFit.size()) {
-			// Labels for values being graphed
-//			g2.setColor(Color.GREEN);
-//			g2.drawString("Lowest: " + lowFit.get(highFit.size() - 1), (this.getWidth() / 3) - 2 * offsetX, 90);
-//
-//			g2.setColor(Color.BLACK);
-//			g2.drawString("Average: " + averageFit.get(averageFit.size() - 1), (2 * this.getWidth() / 3) - 2 * offsetX,
-//					90);
-//
-//			g2.setColor(Color.MAGENTA);
-//			g2.drawString("Highest: " + highFit.get(lowFit.size() - 1), this.getWidth() - 2 * offsetX, 90);
 
 			// Draws horizontal line at max fitness
 			Font smallFont = new Font(null, Font.PLAIN, 10);
@@ -275,16 +175,6 @@ public class EvolutionComponent extends JComponent {
 			// Graphs fitness
 			int n = 0;
 			for (int j = 0; j < i; j++) {
-
-//			g2.setColor(Color.GREEN);
-//			g2.drawString("Lowest: " + lowFit.get(j), (this.getWidth() / 3) - 2 * offsetX, 90);
-//
-//			g2.setColor(Color.BLACK);
-//			g2.drawString("Average: " + averageFit.get(j), (2 * this.getWidth() / 3) - 2 * offsetX,
-//					90);
-//
-//			g2.setColor(Color.MAGENTA);
-//			g2.drawString("Highest: " + highFit.get(j), this.getWidth() - 2 * offsetX, 90);
 
 				BasicStroke brush = new BasicStroke(3);
 				g2.setStroke(brush);
@@ -302,20 +192,9 @@ public class EvolutionComponent extends JComponent {
 				n += scale;
 
 			}
-			//
+			
 			i++;
 		}
-
-//		for(Integer key : pointsAve.keySet()) {
-//			g2.drawLine(key, pointsAve.get(key), key + 1, pointsAve.get(key));
-//		}
-//		for(Integer key : pointsHigh.keySet()) {
-//			g2.drawLine(key, pointsHigh.get(key), key + 1, pointsHigh.get(key));
-//		}
-//		for(Integer key : pointsLow.keySet()) {
-//			g2.drawLine(key, pointsLow.get(key), key + 1, pointsLow.get(key));
-//		}
-//		
 
 	}
 

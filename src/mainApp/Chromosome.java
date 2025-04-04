@@ -16,10 +16,6 @@ import javax.swing.JPanel;
 
 public class Chromosome {
 
-	public static final Color PHENOTYPE_OF_1_GENE = new Color(37, 244, 137);
-	public static final Color PHENOTYPE_OF_0_GENE = new Color(242, 235, 226);
-	public static final int PHENOTYPE_SIDE_LENGTH_1 = 50;
-	public static final int PHENOTYPE_SIDE_LENGTH_2 = 5;
 	public int fitness;
 
 	private int[][] geneticCode;
@@ -157,57 +153,6 @@ public class Chromosome {
 		return decimalRep;
 	}
 
-	public void drawOn(int option, JPanel panel) {
-		if (option == 1) {
-			for (int j = 0; j < this.geneticCode.length; j++) {
-				for (int k = 0; k < this.geneticCode[0].length; k++) {
-					if (this.geneticCode[j][k] == 0) {
-						JButton geneButton = new JButton();
-						geneButton.setPreferredSize(new Dimension(PHENOTYPE_SIDE_LENGTH_1, PHENOTYPE_SIDE_LENGTH_1));
-						geneButton.setBackground(PHENOTYPE_OF_0_GENE);
-						geneButton.addActionListener(
-								new GeneButtonListener(geneButton, PHENOTYPE_OF_0_GENE, PHENOTYPE_OF_1_GENE));
-						panel.add(geneButton);
-					}
-
-					else {
-						JButton geneButton = new JButton();
-						geneButton.setPreferredSize(new Dimension(PHENOTYPE_SIDE_LENGTH_1, PHENOTYPE_SIDE_LENGTH_1));
-						geneButton.setBackground(PHENOTYPE_OF_1_GENE);
-						geneButton.addActionListener(
-								new GeneButtonListener(geneButton, PHENOTYPE_OF_0_GENE, PHENOTYPE_OF_1_GENE));
-						panel.add(geneButton);
-					}
-				}
-			}
-		}
-
-		else {
-			for (int j = 0; j < this.geneticCode.length; j++) {
-				for (int k = 0; k < this.geneticCode[0].length; k++) {
-					if (this.geneticCode[j][k] == 0) {
-						JButton geneButton = new JButton();
-						geneButton.setPreferredSize(new Dimension(PHENOTYPE_SIDE_LENGTH_2, PHENOTYPE_SIDE_LENGTH_2));
-						geneButton.setBackground(PHENOTYPE_OF_0_GENE);
-						geneButton.addActionListener(
-								new GeneButtonListener(geneButton, PHENOTYPE_OF_0_GENE, PHENOTYPE_OF_1_GENE));
-						panel.add(geneButton);
-					}
-
-					else {
-						JButton geneButton = new JButton();
-						geneButton.setPreferredSize(new Dimension(PHENOTYPE_SIDE_LENGTH_2, PHENOTYPE_SIDE_LENGTH_2));
-						geneButton.setBackground(PHENOTYPE_OF_1_GENE);
-						geneButton.addActionListener(
-								new GeneButtonListener(geneButton, PHENOTYPE_OF_0_GENE, PHENOTYPE_OF_1_GENE));
-						panel.add(geneButton);
-					}
-				}
-			}
-		}
-
-	}
-
 	public Chromosome mutatedOffspring(int n) {
 		Chromosome offspring = new Chromosome(this.geneticCode);
 		for (int k = 0; k < n; k++) {
@@ -316,58 +261,6 @@ public class Chromosome {
 		this.fitness = count;
 		return count;
 
-	}
-
-	public int calculateBorderFitness() {
-		int count = 0;
-		for (int i = 0; i < this.numberOfArrays; i++) {
-			for (int j = 0; j < this.numberOfGenesInArray; j++) {
-				if (i == 0 || j == 0 || i == this.numberOfArrays - 1 || j == this.numberOfGenesInArray - 1) {
-					count += this.geneticCode[i][j];
-				}
-			}
-		}
-		return count;
-	}
-
-	/**
-	 * Quantifies the difference between two Chromosome's genetic code.
-	 * 
-	 * @author akamahwa
-	 *
-	 */
-	public int calculateHammingDistance(Chromosome otherChromosome) {
-		int hammingDistance = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				if (this.geneticCode[j][k] != otherChromosome.geneticCode[j][k]) {
-					hammingDistance++;
-				}
-			}
-		}
-		return hammingDistance;
-	}
-
-	/**
-	 * Quantifies the similarity between two Chromosome's genetic code.
-	 * 
-	 * @author akamahwa
-	 *
-	 */
-	int calculateInverseHammingDistance(Chromosome otherChromosome) {
-		int inverseHammingDistance = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				if (this.geneticCode[j][k] == otherChromosome.geneticCode[j][k]) {
-					inverseHammingDistance++;
-				}
-			}
-		}
-		return inverseHammingDistance;
-	}
-
-	public int calculateFitnessMatchOtherChromosome(Chromosome perfectSpecimen) {
-		return 100 * this.calculateHammingDistance(perfectSpecimen) / this.numberOfGenes();
 	}
 
 	private boolean checkIfPerfectSquare(int n) {
