@@ -19,75 +19,50 @@ public class Chromosome {
 	public int fitness;
 
 	private int[][] geneticCode;
-	private int numberOfArrays, numberOfGenesInArray;
-
-	public Chromosome() {
-		Random random = new Random();
-
-		this.numberOfArrays = 10;
-		this.numberOfGenesInArray = 10;
-		int[][] randomGeneticCode = new int[numberOfArrays][numberOfGenesInArray];
-		for (int j = 0; j < numberOfArrays; j++) {
-			for (int k = 0; k < numberOfGenesInArray; k++) {
-				randomGeneticCode[j][k] = random.nextInt(2);
-			}
-		}
-		this.geneticCode = randomGeneticCode;
-		this.fitness = this.calculateInARowFitness();
-		System.out.println(this.fitness);
-	}
+	private int numberOfArrays;
+	private int numberOfGenesInArray;;
+	
+	private static final Random RANDOM = new Random();
 
 	public Chromosome(int genomeSize) {
-		if (genomeSize == 20) {
-			Random random = new Random();
-			this.numberOfArrays = 4;
-			this.numberOfGenesInArray = 5;
-			int[][] randomGeneticCode = new int[this.numberOfArrays][this.numberOfGenesInArray];
-			for (int j = 0; j < this.numberOfArrays; j++) {
-				for (int k = 0; k < this.numberOfGenesInArray; k++) {
-					randomGeneticCode[j][k] = random.nextInt(2);
-				}
-			}
-			this.geneticCode = randomGeneticCode;
-		}
+		
+		initializeChromosome(genomeSize);
+	}
+	
+	public Chromosome(int[][] geneticCode) {
+		initializeCustomChromosome(geneticCode);
+	}
 
-		else if (checkIfPerfectSquare(genomeSize)) {
-			Random random = new Random();
+	private void initializeCustomChromosome(int[][] geneticCode) {
+		this.geneticCode = geneticCode;
+		this.fitness = this.calculateFitnessV1();
+	}
+
+	private void initializeChromosome(int genomeSize) {
+		if (checkIfPerfectSquare(genomeSize)) {
 			this.numberOfArrays = (int) (Math.sqrt(genomeSize));
-			this.numberOfGenesInArray = this.numberOfArrays;
-			int[][] randomGeneticCode = new int[this.numberOfArrays][this.numberOfGenesInArray];
-			for (int j = 0; j < this.numberOfArrays; j++) {
-				for (int k = 0; k < this.numberOfGenesInArray; k++) {
-					if (random.nextBoolean()) {
-						randomGeneticCode[j][k] = 1;
-					} else {
-						randomGeneticCode[j][k] = 0;
-					}
-
-				}
-			}
-			this.geneticCode = randomGeneticCode;
+			this.numberOfGenesInArray = this.numberOfArrays;		
+			this.geneticCode = generateGeneticCode();
 		}
-
 		else {
 			throw new IllegalArgumentException();
 		}
-
 		this.fitness = this.calculateFitnessV1();
-		System.out.println();
 	}
 
-	public Chromosome(int[][] geneticCode) {
-		this.geneticCode = new int[geneticCode.length][geneticCode[0].length];
-		this.numberOfArrays = this.geneticCode.length;
-		this.numberOfGenesInArray = this.geneticCode[0].length;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				this.geneticCode[j][k] = geneticCode[j][k];
+	private int[][] generateGeneticCode() {
+		int[][] randomGeneticCode = new int[numberOfArrays][numberOfGenesInArray];
+		for (int j = 0; j < numberOfArrays; j++) {
+			for (int k = 0; k < numberOfGenesInArray; k++) {
+				randomGeneticCode[j][k] = RANDOM.nextInt(2);
 			}
 		}
-		this.fitness = this.calculateFitnessV1();
+		return randomGeneticCode;
 	}
+
+
+
+	
 
 	public int[][] geneticCode() {
 		return this.geneticCode;
