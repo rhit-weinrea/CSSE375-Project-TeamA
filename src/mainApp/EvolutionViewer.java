@@ -1,6 +1,7 @@
 package mainApp;
 
 import java.awt.BorderLayout;
+import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -34,11 +35,12 @@ public class EvolutionViewer extends JComponent{
 		GridBagLayout grid = new GridBagLayout();
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(grid);
+		inputPanel.setPreferredSize(new Dimension(50, 50));
 		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);
 		frame.add(newComponent, BorderLayout.CENTER);
 		initializeTextFieldToDefault();
 
-		Timer t = new Timer(DELAY, new ActionListener() {
+		Timer timer = new Timer(DELAY, new ActionListener() {
 			public int ticks = 0;
 
 			@Override
@@ -56,6 +58,7 @@ public class EvolutionViewer extends JComponent{
 				ticks++;
 			}
 		});
+
 
 		viewerSwingComponents.enterButton.addActionListener(new ActionListener() {
 			@Override
@@ -90,13 +93,14 @@ public class EvolutionViewer extends JComponent{
 						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites,
 								selectionStrategy);
 					}
-					t.start();
+					timer.start();
 					clicked++;
-				} else if (clicked % 2 == 1) {
-					t.stop();
+				}
+				else if (clicked % 2 == 1) {
+					timer.stop();
 					viewerSwingComponents.enterButton.setText("Start");
 				} else {
-					t.start();
+					timer.start();
 					viewerSwingComponents.enterButton.setText("Pause");
 				}
 			}
@@ -134,7 +138,7 @@ public class EvolutionViewer extends JComponent{
 			if (component instanceof JTextField) {
 				String text = componentToText.get(component);
 				JTextField textField = (JTextField) component;
-				if (!textField.getText().equals(text)) {
+				if(!textField.getText().equals(text) && !textField.getText().equals("")) {
 					componentToDefaultVal.put(textField, Integer.valueOf(textField.getText()));
 				}
 			}

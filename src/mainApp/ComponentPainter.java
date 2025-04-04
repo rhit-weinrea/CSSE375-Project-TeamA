@@ -1,8 +1,8 @@
 package mainApp;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
+import javax.swing.*;
 
 @SuppressWarnings("serial")
 public class ComponentPainter extends JComponent {
