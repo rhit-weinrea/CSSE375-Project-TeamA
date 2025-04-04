@@ -4,89 +4,54 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
 
-/**
- * Converts the contents of a text file into a Chromosome.
- * 
- * @author Wynesakia Akamah & Abby Weinreb
- *
- */
+
 public class ChromosomeGenerator {
-	private String filename;
-	private Chromosome translatedChromosome;
+    private final Chromosome translatedChromosome;
 
-	public ChromosomeGenerator(String filename) throws FileNotFoundException {
-		this.filename = "ChromosomesText/" + filename + ".txt";
-		FileReader reader = new FileReader(this.filename);
-		Scanner scanner = new Scanner(reader);
-		String rawGeneticCode = scanner.nextLine();
+    public ChromosomeGenerator(String filename) throws FileNotFoundException {
+        String filePath = "ChromosomesText/" + filename + ".txt";
+        String rawGeneticCode;
 
-		// Debugger print
-		System.out.println(rawGeneticCode);
-		System.out.println();
+        try (Scanner scanner = new Scanner(new FileReader(filePath))) {
+            if (!scanner.hasNextLine()) {
+                throw new IllegalArgumentException("The file is empty.");
+            }
+            rawGeneticCode = scanner.nextLine().trim();
+        }
 
-		if (rawGeneticCode.length() == 20) {
-			int numberOfArrays = 4;
-			int lengthOfArray = 5;
-			int[][] inputGeneticCode = new int[numberOfArrays][lengthOfArray];
-			for (int j = 0; j < numberOfArrays; j++) {
-				for (int k = 0; k < lengthOfArray; k++) {
-					if (rawGeneticCode.charAt(numberOfArrays * j + k) == '0') {
-						inputGeneticCode[j][k] = 0;
-					}
+        this.translatedChromosome = parseRawGeneticCode(rawGeneticCode);
+    }
 
-					else if (rawGeneticCode.charAt(numberOfArrays * j + k) == '1') {
-						inputGeneticCode[j][k] = 1;
-					}
+    public Chromosome getChromosome() {
+        return translatedChromosome;
+    }
 
-					else {
-						throw new IllegalArgumentException();
-					}
-				}
-			}
-			this.translatedChromosome = new Chromosome(inputGeneticCode);
+    private Chromosome parseRawGeneticCode(String rawGeneticCode) {
+        int totalGenes = rawGeneticCode.length();
 
-			// Debugger print
-			System.out.println(this.translatedChromosome.asString());
-			System.out.println();
-		}
+        if (!isPerfectSquare(totalGenes)) {
+            throw new IllegalArgumentException("Gene sequence length must be a perfect square.");
+        }
 
-		else if (checkIfPerfectSquare(rawGeneticCode.length())) {
-			int numberOfArrays = (int) Math.sqrt(rawGeneticCode.length());
-			int lengthOfArray = numberOfArrays;
-			int[][] inputGeneticCode = new int[numberOfArrays][lengthOfArray];
-			for (int j = 0; j < numberOfArrays; j++) {
-				for (int k = 0; k < lengthOfArray; k++) {
-					if (rawGeneticCode.charAt(numberOfArrays * j + k) == '0') {
-						inputGeneticCode[j][k] = 0;
-					}
+        int dimension = (int) Math.sqrt(totalGenes);
+        int[][] geneticCode = new int[dimension][dimension];
 
-					else if (rawGeneticCode.charAt(numberOfArrays * j + k) == '1') {
-						inputGeneticCode[j][k] = 1;
-					}
+        for (int i = 0; i < totalGenes; i++) {
+            char geneChar = rawGeneticCode.charAt(i);
+            if (geneChar != '0' && geneChar != '1') {
+                throw new IllegalArgumentException("Invalid gene character: " + geneChar);
+            }
 
-					else {
-						throw new IllegalArgumentException();
-					}
-				}
-			}
-			this.translatedChromosome = new Chromosome(inputGeneticCode);
+            int row = i / dimension;
+            int col = i % dimension;
+            geneticCode[row][col] = Character.getNumericValue(geneChar);
+        }
 
-			// Debugger print
-			System.out.println(this.translatedChromosome.asString());
-			System.out.println();
-		}
+        return new Chromosome(geneticCode);
+    }
 
-		else {
-			throw new IllegalArgumentException();
-		}
-	}
-
-	public Chromosome getChromosome() {
-		return this.translatedChromosome;
-	}
-
-	private boolean checkIfPerfectSquare(int n) {
-		int roundedSquareRoot = (int) Math.sqrt(n);
-		return Math.pow(roundedSquareRoot, 2) == n;
-	}
+    private boolean isPerfectSquare(int n) {
+        int root = (int) Math.sqrt(n);
+        return root * root == n;
+    }
 }
