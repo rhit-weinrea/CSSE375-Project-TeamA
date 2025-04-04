@@ -16,23 +16,24 @@ import javax.swing.JTextField;
 public class EvoViewerSwingComponents {
     private static final int FRAME_WIDTH = 1800;
 	private static final int FRAME_HEIGHT = 600;
+    private static final int TEXT_FIELD_WIDTH = 15;
 
     public HashMap<JComponent, String> componentToText = new HashMap<>();
 
     private final String mutationRateText = "Enter Mutation Rate";
-    public JTextField mutationRateButton = new JTextField(mutationRateText, 0);
+    public JTextField mutationRateButton = new JTextField(mutationRateText, TEXT_FIELD_WIDTH);
 
-    private final String numGenerationsText = "Enter Number of Generations";
-    public JTextField numGenerationsButton = new JTextField(numGenerationsText, 0);
+    private final String numGenerationsText = "Enter # of Generations";
+    public JTextField numGenerationsButton = new JTextField(numGenerationsText, TEXT_FIELD_WIDTH);
 
     private final String populationText = "Enter Population";
-    public JTextField populationButton = new JTextField(populationText, 0);
+    public JTextField populationButton = new JTextField(populationText, TEXT_FIELD_WIDTH);
 
     private final String genomeLengthText = "Enter Genome Length";
-    public JTextField genomeLengthButton = new JTextField(genomeLengthText, 0);
+    public JTextField genomeLengthButton = new JTextField(genomeLengthText, TEXT_FIELD_WIDTH);
 
     private final String numEliteIndiv = "Number of Elites";
-    public JTextField numEliteIndivButton = new JTextField(numEliteIndiv, 0);
+    public JTextField numEliteIndivButton = new JTextField(numEliteIndiv, TEXT_FIELD_WIDTH);
 
     private final String enterText = "Start";
     public JButton enterButton = new JButton(enterText);
@@ -46,16 +47,17 @@ public class EvoViewerSwingComponents {
     private final static String crossoverText = "Crossover?";
     public static JCheckBox crossoverButton = new JCheckBox(crossoverText);
 
-    private final String[] selectionChoices = { "Truncation", "Roulette", "Rank" };
+    private final String[] selectionChoices = { "Truncation", "Roulette", "Rank", "Tournament" };
 	public final JComboBox<String> selectionBox = new JComboBox<>(selectionChoices);
 
-    private final String[] evolveChoices = { "Regular", "Elitism" };
-    public final JComboBox<String> evolveTypeBox = new JComboBox<>(evolveChoices);
+    private final String[] evolveTypes = { "Regular", "Elitism" };
+    public final JComboBox<String> evolveTypeBox = new JComboBox<>(evolveTypes);
 
     public EvoViewerSwingComponents(JFrame frame, JPanel inputPanel) {
         frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
         initializeComponentToText();
         removeTextForComponents(componentToText);
+        centerAlignTextFields(componentToText);
         addComponentsToPanel(componentToText, inputPanel);
 		frame.add(inputPanel, BorderLayout.SOUTH);
     }
@@ -65,6 +67,15 @@ public class EvoViewerSwingComponents {
             if (component instanceof JTextField) {
                 JTextField textField = (JTextField) component;
                 removeTextOnClick(textField);
+            }
+        }
+    }
+
+    private void centerAlignTextFields(HashMap<JComponent, String> componentToText) {
+        for (JComponent component : componentToText.keySet()) {
+            if (component instanceof JTextField) {
+                JTextField textField = (JTextField) component;
+                textField.setHorizontalAlignment(JTextField.CENTER);
             }
         }
     }
@@ -80,6 +91,7 @@ public class EvoViewerSwingComponents {
 		inputPanel.add(evolveTypeBox);
 		inputPanel.add(terminateAtMaxButton);
 		inputPanel.add(crossoverButton);
+        inputPanel.add(evolveTypeBox);
 		inputPanel.add(showFittestButton);
     }
 
@@ -99,7 +111,6 @@ public class EvoViewerSwingComponents {
 
     private void removeTextOnClick(JTextField textField){
 		textField.addFocusListener(new FocusListener() {
-			String currentText = textField.getText();
 			@Override
 			public void focusGained(FocusEvent e) {
 				textField.setText("");
@@ -107,7 +118,9 @@ public class EvoViewerSwingComponents {
 
 			@Override
 			public void focusLost(FocusEvent e) {
-				textField.setText(currentText);
+                if (textField.getText().isEmpty()) {
+                    textField.setText(componentToText.get(textField));
+                }
 			}
 
 		});

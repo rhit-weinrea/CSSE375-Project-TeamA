@@ -52,8 +52,13 @@ public class EvolutionComponent extends JComponent {
 
 	}
 	
+	public EvolutionLoop getEvoLoop() 
+	{
+		return evoLoop;
+	}
 	public EvolutionLoop getLoop() 
 	{
+		return evoLoop;
 	}
 
 	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy) 
