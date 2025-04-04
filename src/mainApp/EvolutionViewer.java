@@ -4,13 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
 import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+import mainApp.EvolutionLoop.SelectionType;
 
 public class EvolutionViewer {
 	private int genomeLengthVal = 20;
@@ -87,11 +87,11 @@ public class EvolutionViewer {
 					
 					if(evolveType.equals("Elitism")) 
 					{
-						numElites = elitismNum;
+						numElites = numEliteIndivVal;
 					}
 
 					for (int i = 0; i < numGenerationsVal; i++) {
-						newComponent.run(crossoverOption.isSelected(), mutationRateVal, numElites, selectionStrategy);
+						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites, selectionStrategy);
 					}
 					t.start();
 					clicked++;
