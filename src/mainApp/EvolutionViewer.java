@@ -12,7 +12,7 @@ import javax.swing.JTextField;
 import javax.swing.Timer;
 import mainApp.EvolutionLoop.SelectionType;
 
-public class EvolutionViewer {
+public class EvolutionViewer extends JComponent{
 	private int genomeLengthVal = 100;
 	private int populationVal = 100;
 	private int numGenerationsVal = 500;
