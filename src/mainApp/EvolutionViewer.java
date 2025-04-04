@@ -1,91 +1,42 @@
 package mainApp;
 
 import java.awt.BorderLayout;
-import java.awt.Color;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 
-import javax.swing.Timer;
-
-import mainApp.EvolutionLoop.SelectionType;
-
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComboBox;
+import java.util.HashMap;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
+import javax.swing.Timer;
 
 public class EvolutionViewer {
+	private int genomeLengthVal = 20;
+	private int populationVal = 100;
+	private int numGenerationsVal = 500;
+	private int mutationRateVal = 5;
+	private int numEliteIndivVal = 1;
+	private int clicked;
+	private int fitClick;
 
-	static final int FRAME_WIDTH = 1800;
-	static final int FRAME_HEIGHT = 600;
-
-	private int genomeLengthVal, populationVal, numGenerationsVal, mutationRateVal, elitismNum, clicked, fitClick;
 	private String selectionType, evolveType;
+	private EvoViewerSwingComponents viewerSwingComponents;
 
-	// How long to wait in milliseconds between each step of the simulation
 	private static final int DELAY = 50;
+	private HashMap<JTextField, Integer> componentToDefaultVal = new HashMap<>();
 
 	public EvolutionViewer() {
-		// Creates frames
 		JFrame frame = new JFrame();
-		frame.setPreferredSize(new Dimension(FRAME_WIDTH, FRAME_HEIGHT));
-		// Creates instance of EvolutionComponent
-		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, this.genomeLengthVal),
-				populationVal);
-
-		// Adding buttons and creating layout
+		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, genomeLengthVal), populationVal);
 		GridBagLayout grid = new GridBagLayout();
-
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(grid);
-
-		ArrayList<Component> textFields = new ArrayList<Component>();
-
-		JTextField mutationRate = new JTextField("Enter Mutation Rate", 0);
-		JTextField numGenerations = new JTextField("Enter Number of Generations", 0);
-		JTextField population = new JTextField("Enter Population", 0);
-		JTextField genomeLength = new JTextField("Enter Genome Length", 0);
-		JTextField elitismNumButton = new JTextField("Number of Elites", 0);
-		JButton enterButton = new JButton("Start");
-		JButton seeFitChrom = new JButton("Show Fittest Chromosome");
-		JCheckBox terminateAtMaxButton = new JCheckBox("Terminate at Max Fitness?");
-		JCheckBox crossoverOption = new JCheckBox("Crossover?");
-
-
-		String[] selectionChoices = { "Truncation", "Roulette", "Rank", "Tournament" };
-
-		final JComboBox<String> cb = new JComboBox<String>(selectionChoices);
-
-		String[] evolveChoices = { "Regular", "Elitism" };
-
-		final JComboBox<String> cb2 = new JComboBox<String>(evolveChoices);
-
-		// Add things to frame
-		inputPanel.add(enterButton);
-		inputPanel.add(genomeLength);
-		inputPanel.add(population);
-		inputPanel.add(numGenerations);
-		inputPanel.add(mutationRate);
-		inputPanel.add(elitismNumButton);
-		inputPanel.add(cb);
-		inputPanel.add(cb2);
-		inputPanel.add(terminateAtMaxButton);
-		inputPanel.add(crossoverOption);
-		inputPanel.add(seeFitChrom);
-
-		frame.add(inputPanel, BorderLayout.SOUTH);
+		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);
 		frame.add(newComponent, BorderLayout.CENTER);
+		initializeTextFieldToDefault();
 
-
-		// Add button panel on the right side
-
-		// Starts the simulator
 		Timer t = new Timer(DELAY, new ActionListener() {
 			public int ticks = 0;
 
@@ -94,37 +45,27 @@ public class EvolutionViewer {
 				if (ticks == numGenerationsVal - 1) {
 					return;
 				}
-
-				if (terminateAtMaxButton.isSelected()) {
+				if (viewerSwingComponents.terminateAtMaxButton.isSelected()) {
 					if (newComponent.highFit.get(ticks) == (Integer) genomeLengthVal) {
 						return;
 					}
-
 				}
-
 				frame.repaint();
 				newComponent.repaint();
-				// new ChromosomeViewer(newComponent.fittest.get(ticks));
 				ticks++;
-
 			}
-
 		});
 
-		enterButton.addActionListener(new ActionListener() {
+		viewerSwingComponents.enterButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clicked++;
 				if (clicked == 1) {
-					enterButton.setText("Pause");
-
-					genomeLengthVal = Integer.parseInt(genomeLength.getText());
-					numGenerationsVal = Integer.parseInt(numGenerations.getText());
-					populationVal = Integer.parseInt(population.getText());
-					mutationRateVal = Integer.parseInt(mutationRate.getText());
-					selectionType = cb.getSelectedItem().toString();
-					evolveType = cb2.getSelectedItem().toString();
-					elitismNum = Integer.parseInt(elitismNumButton.getText());
+					viewerSwingComponents.enterButton.setText("Pause");
+					setDefaults(viewerSwingComponents.componentToText);
+					extractMapValues();
+					selectionType = viewerSwingComponents.selectionBox.getSelectedItem().toString();
+					evolveType = viewerSwingComponents.evolveTypeBox.getSelectedItem().toString();
 					newComponent.genSize = numGenerationsVal;
 					newComponent.startUp(populationVal, genomeLengthVal);
 					SelectionType selectionStrategy = SelectionType.TRUNCATION; //Default value
@@ -152,38 +93,55 @@ public class EvolutionViewer {
 					for (int i = 0; i < numGenerationsVal; i++) {
 						newComponent.run(crossoverOption.isSelected(), mutationRateVal, numElites, selectionStrategy);
 					}
-					
 					t.start();
 					clicked++;
 				}
-
 				else if (clicked % 2 == 1) {
 					t.stop();
-					enterButton.setText("Start");
+					viewerSwingComponents.enterButton.setText("Start");
 				} else {
 					t.start();
-					enterButton.setText("Pause");
+					viewerSwingComponents.enterButton.setText("Pause");
 				}
-
 			}
 
 		});
 
-		seeFitChrom.addActionListener(new ActionListener() {
-
+		viewerSwingComponents.showFittestButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ChromosomeViewer(newComponent.fittest.get(fitClick));
-
+				new ChromosomeViewer(newComponent.fittest.get(fitClick), 0.05);
 			}
-
 		});
-
-		// Creates timer and runs simulation
-
 		frame.pack();
 		frame.setVisible(true);
-
 	}
 
+	private void extractMapValues() {
+		mutationRateVal = componentToDefaultVal.get(viewerSwingComponents.mutationRateButton);
+		numGenerationsVal = componentToDefaultVal.get(viewerSwingComponents.numGenerationsButton);
+		populationVal = componentToDefaultVal.get(viewerSwingComponents.populationButton);
+		genomeLengthVal = componentToDefaultVal.get(viewerSwingComponents.genomeLengthButton);
+		numEliteIndivVal = componentToDefaultVal.get(viewerSwingComponents.numEliteIndivButton);
+	}
+
+	private void initializeTextFieldToDefault(){
+		componentToDefaultVal.put(viewerSwingComponents.mutationRateButton, mutationRateVal);
+		componentToDefaultVal.put(viewerSwingComponents.numGenerationsButton, numGenerationsVal);
+		componentToDefaultVal.put(viewerSwingComponents.populationButton, populationVal);
+		componentToDefaultVal.put(viewerSwingComponents.genomeLengthButton, genomeLengthVal);
+		componentToDefaultVal.put(viewerSwingComponents.numEliteIndivButton, numEliteIndivVal);
+	}
+
+	private void setDefaults(HashMap<JComponent, String> componentToText) {
+		for(JComponent component : componentToText.keySet()) {
+			if (component instanceof JTextField) {
+				String text = componentToText.get(component);
+				JTextField textField = (JTextField) component;
+				if(!textField.getText().equals(text)) {
+					componentToDefaultVal.put(textField, Integer.valueOf(textField.getText()));
+				}
+			}
+		}
+	}
 }

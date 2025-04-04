@@ -17,6 +17,7 @@ import mainApp.EvolutionLoop.SelectionType;
 public class EvolutionComponent extends JComponent {
 
 	public static final int LINE_WIDTH = 2;
+	private static final int FRAME_WIDTH = 1800;
 	public static final int STATS_HEIGHT = 200;
 	public static final int SIDE_OFFSET = 100;
 	private EvolutionLoop evoLoop;
@@ -42,8 +43,8 @@ public class EvolutionComponent extends JComponent {
 
 	public EvolutionComponent(EvolutionLoop evoLoop2, int populationVal) {
 		// TODO Auto-generated constructor stub
-		this.setPreferredSize(new Dimension(EvolutionViewer.FRAME_WIDTH, STATS_HEIGHT));
-		//this.evoLoop = new EvolutionLoop(numPop);
+		this.setPreferredSize(new Dimension(FRAME_WIDTH, STATS_HEIGHT));
+		// this.evoLoop = new EvolutionLoop(numPop);
 		this.lowFit = new ArrayList<Integer>();
 		this.averageFit = new ArrayList<Integer>();
 		this.highFit = new ArrayList<Integer>();
