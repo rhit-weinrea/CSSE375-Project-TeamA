@@ -11,6 +11,7 @@ public class EvolutionLoop {
 	private ArrayList<Chromosome> curPop;
 	private int numPop;
 	private SelectionStrategy selectionStrategy;
+	private ChromosomeOperations cO = new ChromosomeOperations();
 
 	public EvolutionLoop(int numPop, int genomeSize) {
 		this.numPop = numPop;
@@ -33,7 +34,7 @@ public class EvolutionLoop {
 
 	class sortPop implements Comparator<Chromosome> {
 		public int compare(Chromosome c1, Chromosome c2) {
-			return c1.fitness - c2.fitness;
+			return c1.getFitness() - c2.getFitness();
 		}
 	}
 
@@ -47,7 +48,7 @@ public class EvolutionLoop {
 		}
 
 		for (int i = 0; i < curPop.size(); i++) {
-			System.out.println(curPop.get(i).fitness);
+			System.out.println(curPop.get(i).getFitness());
 		}
 	}
 	
@@ -80,8 +81,8 @@ public class EvolutionLoop {
 
 		for (int i = 0; i < curPop.size(); i++) {
 
-			Chromosome chromToAdd1 = new Chromosome(curPop.get(i).mutate3(mutate));
-			Chromosome chromToAdd2 = new Chromosome(curPop.get(i).mutate3(mutate));
+			Chromosome chromToAdd1 = new Chromosome(cO.mutate3(curPop.get(i), mutate));
+			Chromosome chromToAdd2 = new Chromosome(cO.mutate3(curPop.get(i), mutate));
 
 			updatedSet.add(chromToAdd1);
 			updatedSet.add(chromToAdd2);
@@ -120,7 +121,7 @@ public class EvolutionLoop {
 
 			for (int i = 0; i < curPop.size(); i++) {
 
-				Chromosome chromToAdd = new Chromosome(curPop.get(i).mutate3(mutate));
+				Chromosome chromToAdd = new Chromosome(cO.mutate3(curPop.get(i), mutate));
 
 				updatedSet.add(chromToAdd);
 
@@ -140,8 +141,8 @@ public class EvolutionLoop {
 	public void crossoverMutation(int crossoverPoint) {
 
 		for (int i = 0; i < curPop.size() - 2; i++) {
-			updatedSet.addAll(curPop.get(i).crossoverWith(curPop.get(i + 1), crossoverPoint));
-		}
+			updatedSet.addAll(cO.crossoverWith(curPop.get(i), curPop.get(i + 1), crossoverPoint));
+		}								
 
 		curPop = new ArrayList<>();
 		for (int i = 0; i < updatedSet.size(); i++) {
@@ -162,7 +163,7 @@ public class EvolutionLoop {
 	public int returnAverage() {
 		int countForAverage = 0;
 		for (int i = 0; i < curPop.size(); i++) {
-			countForAverage += curPop.get(i).fitness;
+			countForAverage += cO.calculateFitnessV1(curPop.get(i));
 		}
 		int average = countForAverage / curPop.size();
 		System.out.println("Average: " + average);
@@ -173,8 +174,8 @@ public class EvolutionLoop {
 	public int returnHighestAverage() {
 		int highest = Integer.MIN_VALUE;
 		for (int i = 0; i < curPop.size(); i++) {
-			if (curPop.get(i).fitness > highest) {
-				highest = curPop.get(i).fitness;
+			if (curPop.get(i).getFitness() > highest) {
+				highest = cO.calculateFitnessV1(curPop.get(i));
 			}
 		}
 		System.out.println();
@@ -186,8 +187,8 @@ public class EvolutionLoop {
 	public int returnLowestAverage() {
 		int lowest = Integer.MAX_VALUE;
 		for (int i = 0; i < curPop.size(); i++) {
-			if (curPop.get(i).fitness < lowest) {
-				lowest = curPop.get(i).fitness;
+			if (curPop.get(i).getFitness() < lowest) {
+				lowest = cO.calculateFitnessV1(curPop.get(i));
 			}
 
 		}

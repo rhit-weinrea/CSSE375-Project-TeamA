@@ -13,7 +13,7 @@ import javax.swing.Timer;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class EvolutionViewer {
-	private int genomeLengthVal = 20;
+	private int genomeLengthVal = 100;
 	private int populationVal = 100;
 	private int numGenerationsVal = 500;
 	private int mutationRateVal = 5;
@@ -29,13 +29,13 @@ public class EvolutionViewer {
 
 	public EvolutionViewer() {
 		JFrame frame = new JFrame();
-		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, genomeLengthVal), populationVal);
-		ComponentPainter componentPainter = new ComponentPainter(newComponent);
+		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, genomeLengthVal),
+				populationVal);
 		GridBagLayout grid = new GridBagLayout();
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(grid);
 		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);
-		frame.add(componentPainter, BorderLayout.CENTER);
+		frame.add(newComponent, BorderLayout.CENTER);
 		initializeTextFieldToDefault();
 
 		Timer t = new Timer(DELAY, new ActionListener() {
@@ -52,7 +52,7 @@ public class EvolutionViewer {
 					}
 				}
 				frame.repaint();
-				componentPainter.repaint();
+				newComponent.repaint();
 				ticks++;
 			}
 		});
@@ -69,35 +69,30 @@ public class EvolutionViewer {
 					evolveType = viewerSwingComponents.evolveTypeBox.getSelectedItem().toString();
 					newComponent.genSize = numGenerationsVal;
 					newComponent.startUp(populationVal, genomeLengthVal);
-					SelectionType selectionStrategy = SelectionType.TRUNCATION; //Default value
+					SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
 					int numElites = 0;
 
 					if (selectionType.equals("Truncation")) {
 						selectionStrategy = SelectionType.TRUNCATION;
-					}
-					else if (selectionType.equals("Roulette")) {
+					} else if (selectionType.equals("Roulette")) {
 						selectionStrategy = SelectionType.ROULETTE;
-					}
-					else if (selectionType.equals("Rank")) {
+					} else if (selectionType.equals("Rank")) {
 						selectionStrategy = SelectionType.RANK;
-					}
-					else if(selectionType.equals("Tournament")) 
-					{
+					} else if (selectionType.equals("Tournament")) {
 						selectionStrategy = SelectionType.TOURNAMENT;
 					}
-					
-					if(evolveType.equals("Elitism")) 
-					{
+
+					if (evolveType.equals("Elitism")) {
 						numElites = numEliteIndivVal;
 					}
 
 					for (int i = 0; i < numGenerationsVal; i++) {
-						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites, selectionStrategy);
+						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites,
+								selectionStrategy);
 					}
 					t.start();
 					clicked++;
-				}
-				else if (clicked % 2 == 1) {
+				} else if (clicked % 2 == 1) {
 					t.stop();
 					viewerSwingComponents.enterButton.setText("Start");
 				} else {
@@ -126,7 +121,7 @@ public class EvolutionViewer {
 		numEliteIndivVal = componentToDefaultVal.get(viewerSwingComponents.numEliteIndivButton);
 	}
 
-	private void initializeTextFieldToDefault(){
+	private void initializeTextFieldToDefault() {
 		componentToDefaultVal.put(viewerSwingComponents.mutationRateButton, mutationRateVal);
 		componentToDefaultVal.put(viewerSwingComponents.numGenerationsButton, numGenerationsVal);
 		componentToDefaultVal.put(viewerSwingComponents.populationButton, populationVal);
@@ -135,11 +130,11 @@ public class EvolutionViewer {
 	}
 
 	private void setDefaults(HashMap<JComponent, String> componentToText) {
-		for(JComponent component : componentToText.keySet()) {
+		for (JComponent component : componentToText.keySet()) {
 			if (component instanceof JTextField) {
 				String text = componentToText.get(component);
 				JTextField textField = (JTextField) component;
-				if(!textField.getText().equals(text)) {
+				if (!textField.getText().equals(text)) {
 					componentToDefaultVal.put(textField, Integer.valueOf(textField.getText()));
 				}
 			}

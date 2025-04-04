@@ -16,6 +16,7 @@ public class MutateListener implements ActionListener {
 	private Double mutationRate;
 	private Chromosome chromosome;
 	private JFrame frame;
+	private ChromosomeOperations cO = new ChromosomeOperations();
 
 	public MutateListener(Chromosome chromosome, JFrame frame, double mutationRate) {
 		this.chromosome = chromosome;
@@ -33,7 +34,7 @@ public class MutateListener implements ActionListener {
 		System.out.println("Mutation Rate: " + mutationRate);
 		System.out.println();
 		int numberOfMutations = (int) (mutationRate * this.chromosome.numberOfGenes() / 100);
-		Chromosome mutatedOffspring = chromosome.mutatedOffspring(numberOfMutations);
+		Chromosome mutatedOffspring = cO.mutatedOffspring(chromosome, numberOfMutations);										
 		System.out.println(mutatedOffspring.asString());
 		new ChromosomeViewer(mutatedOffspring, mutationRate);
 	}

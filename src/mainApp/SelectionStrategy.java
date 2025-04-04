@@ -8,7 +8,7 @@ public abstract class SelectionStrategy {
 	
 	class sortPop implements Comparator<Chromosome> {
 		public int compare(Chromosome c1, Chromosome c2) {
-			return c1.fitness - c2.fitness;
+			return c1.getFitness() - c2.getFitness();
 		}
 	}
 	

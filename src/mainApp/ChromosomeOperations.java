@@ -5,23 +5,17 @@ import java.util.Random;
 
 public class ChromosomeOperations {
 	
-	private int[][] geneticCode;
-	private int numberOfArrays;
-	private int numberOfGenesInArray;
-	private Chromosome chromosome;
+
 	
-	public ChromosomeOperations(Chromosome c) {
-		this.geneticCode = c.geneticCode();
-		this.numberOfArrays = c.numberOfArrays();
-		this.numberOfGenesInArray = c.numberOfGenesInArray();
-		this.chromosome = c;
+	public ChromosomeOperations() {
+		
 		
 	}
 	
 	
 	
-	public Chromosome mutatedOffspring(int n) {
-		Chromosome offspring = new Chromosome(this.geneticCode);
+	public Chromosome mutatedOffspring(Chromosome c, int n) {
+		Chromosome offspring = new Chromosome(c.geneticCode());
 		for (int k = 0; k < n; k++) {
 			Random random = new Random();
 			int randomArray = random.nextInt(offspring.numberOfArrays());
@@ -36,21 +30,21 @@ public class ChromosomeOperations {
 		return offspring;
 	}
 
-	public ArrayList<Chromosome> crossoverWith(Chromosome mate, int crossoverPoint) {
+	public ArrayList<Chromosome> crossoverWith(Chromosome mate1, Chromosome mate2, int crossoverPoint) {
 		// Assumption: Parents have the same code size.
 		ArrayList<Chromosome> offspring = new ArrayList<>();
-		int[][] firstbornCode = new int[this.numberOfArrays][this.numberOfGenesInArray];
-		int[][] secondbornCode = new int[this.numberOfArrays][this.numberOfGenesInArray];
+		int[][] firstbornCode = new int[mate1.numberOfArrays()][mate1.numberOfGenesInArray()];
+		int[][] secondbornCode = new int[mate1.numberOfArrays()][mate1.numberOfGenesInArray()];
 		for (int j = 0; j < firstbornCode.length; j++) {
 			for (int k = 0; k < firstbornCode[0].length; k++) {
 				if (firstbornCode.length * j + k < crossoverPoint) {
-					firstbornCode[j][k] = this.geneticCode[j][k];
-					secondbornCode[j][k] = mate.geneticCode()[j][k];
+					firstbornCode[j][k] = mate1.geneticCode()[j][k];
+					secondbornCode[j][k] = mate2.geneticCode()[j][k];
 				}
 
 				else {
-					firstbornCode[j][k] = mate.geneticCode()[j][k];
-					secondbornCode[j][k] = this.geneticCode[j][k];
+					firstbornCode[j][k] = mate2.geneticCode()[j][k];
+					secondbornCode[j][k] = mate1.geneticCode()[j][k];
 				}
 			}
 		}
@@ -60,14 +54,14 @@ public class ChromosomeOperations {
 		return offspring;
 	}
 
-	public int[][] mutate3(int n) {
+	public int[][] mutate3(Chromosome c, int n) {
 		Random random = new Random();
-		int[][] newGeneCode = new int[this.geneticCode.length][this.geneticCode[0].length];
+		int[][] newGeneCode = new int[c.geneticCode().length][c.geneticCode()[0].length];
 
 		int rand = 0;
-		for (int i = 0; i < this.geneticCode.length; i++) {
-			for (int j = 0; j < this.geneticCode[0].length; j++) {
-				newGeneCode[i][j] = this.geneticCode[i][j];
+		for (int i = 0; i < c.geneticCode().length; i++) {
+			for (int j = 0; j < c.geneticCode()[0].length; j++) {
+				newGeneCode[i][j] = c.geneticCode()[i][j];
 			}
 		}
 
@@ -90,23 +84,23 @@ public class ChromosomeOperations {
 		return newGeneCode;
 	}
 
-	public int calculateFitnessV1() {
+	public int calculateFitnessV1(Chromosome chromosome) {
 		int count = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
-				if (this.geneticCode[j][k] == 1) {
+		for (int j = 0; j < chromosome.numberOfArrays(); j++) {
+			for (int k = 0; k < chromosome.numberOfGenesInArray(); k++) {
+				if (chromosome.geneticCode()[j][k] == 1) {
 					count++;
 				}
 			}
 		}
-		chromosome.fitness = count;
+		
 		
 		return count;
 	}
 
 	// Calculates fitness based on how many consecutive bits are 1's
 	// ex: 100110110111 has a fitness of 7
-	public int calculateInARowFitness() {
+	public int calculateInARowFitness(Chromosome chromosome) {
 		int count = 1;
 		String rawGene = chromosome.asStringRaw();
 		int i = 0;
@@ -124,7 +118,6 @@ public class ChromosomeOperations {
 			return 0;
 		}
 
-		chromosome.fitness = count;
 		return count;
 
 	}

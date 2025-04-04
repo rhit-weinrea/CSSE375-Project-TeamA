@@ -15,7 +15,7 @@ public class RouletteSelection extends SelectionStrategy {
 		double[] fitnessArray = new double[sortedPop.size()];
 		for(int i = 0; i < sortedPop.size(); i++) 
 		{
-			int fitness = sortedPop.get(i).fitness;
+			int fitness = sortedPop.get(i).getFitness();
 			//System.out.println("fitness is " + fitness + " at array index " + i);
 			fitnessArray[i] = fitness;
 			totalFitness += fitness;

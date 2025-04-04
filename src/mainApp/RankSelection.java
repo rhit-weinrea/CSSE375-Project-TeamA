@@ -19,7 +19,7 @@ public class RankSelection extends SelectionStrategy {
 		}
 
 		for (int i = 0; i < newPop.size(); i++) {
-			total += newPop.get(i).fitness;
+			total += newPop.get(i).getFitness();
 			double percentage = (double) i / (double) total;
 			rankPercentSum += percentage;
 			valuesArray[i] = rankPercentSum;

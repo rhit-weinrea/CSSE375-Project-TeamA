@@ -7,51 +7,46 @@ import java.util.Random;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-/**
- * Sets up a Chromosome to be drawn and analyzed.
- * 
- * @author Wynesakia Akamah & Abby Weinreb
- *
- */
+
 
 public class Chromosome {
 
-	public int fitness;
+	private int fitness;
 
 	private int[][] geneticCode;
-	private int numberOfArrays;
-	private int numberOfGenesInArray;
-	private ChromosomeOperations cOperations;
+	private static int numberOfArrays;
+	private static int numberOfGenesInArray;
+	private ChromosomeOperations cO = new ChromosomeOperations();
 	
 	private static final Random RANDOM = new Random();
 
 	public Chromosome(int genomeSize) {
-		this.cOperations = new ChromosomeOperations(this);
 		initializeChromosome(genomeSize);
+		
 		
 	}
 	
 	public Chromosome(int[][] geneticCode) {
-		this.cOperations = new ChromosomeOperations(this);
 		initializeCustomChromosome(geneticCode);
+		
 		
 	}
 
 	private void initializeCustomChromosome(int[][] geneticCode) {
 		this.geneticCode = geneticCode;
-		this.fitness = cOperations.calculateFitnessV1();
+		this.fitness = cO.calculateFitnessV1(this);
 	}
 
 	private void initializeChromosome(int genomeSize) {
 		if (checkIfPerfectSquare(genomeSize)) {
-			this.numberOfArrays = (int) (Math.sqrt(genomeSize));
-			this.numberOfGenesInArray = this.numberOfArrays;		
+			Chromosome.numberOfArrays = (int) (Math.sqrt(genomeSize));
+			Chromosome.numberOfGenesInArray = Chromosome.numberOfArrays;		
 			this.geneticCode = generateGeneticCode();
 		}
 		else {
 			throw new IllegalArgumentException();
 		}
-		this.fitness = cOperations.calculateFitnessV1();
+		this.fitness = cO.calculateFitnessV1(this);
 	}
 
 	private int[][] generateGeneticCode() {
@@ -70,15 +65,15 @@ public class Chromosome {
 	}
 
 	public int numberOfArrays() {
-		return this.numberOfArrays;
+		return Chromosome.numberOfArrays;
 	}
 
 	public int numberOfGenesInArray() {
-		return this.numberOfGenesInArray;
+		return Chromosome.numberOfGenesInArray;
 	}
 
 	public int numberOfGenes() {
-		return this.numberOfArrays * numberOfGenesInArray;
+		return Chromosome.numberOfArrays * numberOfGenesInArray;
 	}
 
 	public void setGeneticCode(int[][] geneticCode) {
@@ -110,19 +105,30 @@ public class Chromosome {
 
 	public long getDecimal() {
 		long decimalRep = 0;
-		for (int j = 0; j < this.numberOfArrays; j++) {
-			for (int k = 0; k < this.numberOfGenesInArray; k++) {
+		for (int j = 0; j < Chromosome.numberOfArrays; j++) {
+			for (int k = 0; k < Chromosome.numberOfGenesInArray; k++) {
 				decimalRep += this.geneticCode[j][k] * Math.pow(2, j * this.numberOfArrays + k);
 			}
 		}
 		return decimalRep;
 	}
+	
 
 	
 
 	private boolean checkIfPerfectSquare(int n) {
 		int roundedSquareRoot = (int) Math.sqrt(n);
 		return Math.pow(roundedSquareRoot, 2) == n;
+	}
+
+
+
+	public int getFitness() {
+		return fitness;
+	}
+
+	public void mutate3(int n) {
+		cO.mutate3(this, n);
 	}
 
 }
