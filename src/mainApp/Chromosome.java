@@ -11,8 +11,6 @@ import javax.swing.JPanel;
 
 public class Chromosome {
 
-	private int fitness;
-
 	private int[][] geneticCode;
 	private static int numberOfArrays;
 	private static int numberOfGenesInArray;
@@ -34,7 +32,6 @@ public class Chromosome {
 
 	private void initializeCustomChromosome(int[][] geneticCode) {
 		this.geneticCode = geneticCode;
-		this.fitness = cO.calculateFitnessV1(this);
 	}
 
 	private void initializeChromosome(int genomeSize) {
@@ -46,7 +43,6 @@ public class Chromosome {
 		else {
 			throw new IllegalArgumentException();
 		}
-		this.fitness = cO.calculateFitnessV1(this);
 	}
 
 	private int[][] generateGeneticCode() {
@@ -119,12 +115,6 @@ public class Chromosome {
 	private boolean checkIfPerfectSquare(int n) {
 		int roundedSquareRoot = (int) Math.sqrt(n);
 		return Math.pow(roundedSquareRoot, 2) == n;
-	}
-
-
-
-	public int getFitness() {
-		return fitness;
 	}
 
 	public void mutate3(int n) {

@@ -1,14 +1,18 @@
-package mainApp;
+package selectionStrategies;
 
 import java.util.ArrayList;
 import java.util.Random;
+
+import fitnessFunctions.FitnessFunction;
+import mainApp.Chromosome;
 
 public class TournamentSelection extends SelectionStrategy {
 	
 	private Random r;
 	
-	public TournamentSelection() 
+	public TournamentSelection(FitnessFunction fitness) 
 	{
+		super(fitness);
 		this.r = new Random();
 	}
 	

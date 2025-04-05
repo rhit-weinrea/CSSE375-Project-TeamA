@@ -84,42 +84,4 @@ public class ChromosomeOperations {
 		return newGeneCode;
 	}
 
-	public int calculateFitnessV1(Chromosome chromosome) {
-		int count = 0;
-		for (int j = 0; j < chromosome.numberOfArrays(); j++) {
-			for (int k = 0; k < chromosome.numberOfGenesInArray(); k++) {
-				if (chromosome.geneticCode()[j][k] == 1) {
-					count++;
-				}
-			}
-		}
-		
-		
-		return count;
-	}
-
-	// Calculates fitness based on how many consecutive bits are 1's
-	// ex: 100110110111 has a fitness of 7
-	public int calculateInARowFitness(Chromosome chromosome) {
-		int count = 1;
-		String rawGene = chromosome.asStringRaw();
-		int i = 0;
-		while (i < rawGene.length() - 1) {
-			if (rawGene.charAt(i) == '1' && rawGene.charAt(i + 1) == '1') {
-				count++;
-			}
-			i++;
-		}
-		if (rawGene.charAt(rawGene.length() - 2) == '1' && rawGene.charAt(rawGene.length() - 1) == '1') {
-			count++;
-		}
-
-		if (count == 1) {
-			return 0;
-		}
-
-		return count;
-
-	}
-
 }

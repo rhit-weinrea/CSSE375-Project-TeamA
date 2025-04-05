@@ -1,13 +1,17 @@
-package mainApp;
+package selectionStrategies;
 
 import java.util.ArrayList;
+
+import fitnessFunctions.FitnessFunction;
+import mainApp.Chromosome;
 
 public class TruncationSelection extends SelectionStrategy {
 	
 	private int numPop;
 	
-	public TruncationSelection(int numPop) 
+	public TruncationSelection(int numPop, FitnessFunction fitness) 
 	{
+		super(fitness);
 		this.numPop = numPop;
 	}
 	

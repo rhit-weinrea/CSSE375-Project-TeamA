@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import javax.swing.JComponent;
 
+import mainApp.EvolutionLoop.FitnessType;
 import mainApp.EvolutionLoop.SelectionType;
 
 @SuppressWarnings("serial")
@@ -68,10 +69,16 @@ public class EvolutionComponent extends JComponent {
 	{
 		return this.evoLoop;
 	}
+	
+	public EvolutionLoop getEvoLoop() 
+	{
+		return this.evoLoop;
+	}
 
-	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy) 
+	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy, FitnessType fitnessFunction) 
 	{
 		evoLoop.changeSelectionStrategy(selectionStrategy);
+		evoLoop.changeFitnessType(fitnessFunction);
 		evoLoop.selection();
 		
 		if(numElites == 0) 
