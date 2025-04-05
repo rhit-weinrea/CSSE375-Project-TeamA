@@ -11,6 +11,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
+
+import mainApp.EvolutionLoop.FitnessType;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class EvolutionViewer extends JComponent{
@@ -22,7 +24,7 @@ public class EvolutionViewer extends JComponent{
 	private int clicked;
 	private int fitClick;
 
-	private String selectionType, evolveType;
+	private String selectionType, evolveType, fitnessType;
 	private EvoViewerSwingComponents viewerSwingComponents;
 
 	private static final int DELAY = 50;
@@ -69,10 +71,12 @@ public class EvolutionViewer extends JComponent{
 					setDefaults(viewerSwingComponents.componentToText);
 					extractMapValues();
 					selectionType = viewerSwingComponents.selectionBox.getSelectedItem().toString();
+					fitnessType = viewerSwingComponents.fitnessBox.getSelectedItem().toString();
 					evolveType = viewerSwingComponents.evolveTypeBox.getSelectedItem().toString();
 					newComponent.genSize = numGenerationsVal;
 					newComponent.startUp(populationVal, genomeLengthVal);
 					SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
+					FitnessType fitnessFunction = FitnessType.ALLONES; //Default value
 					int numElites = 0;
 
 					if (selectionType.equals("Truncation")) {
@@ -84,6 +88,16 @@ public class EvolutionViewer extends JComponent{
 					} else if (selectionType.equals("Tournament")) {
 						selectionStrategy = SelectionType.TOURNAMENT;
 					}
+					
+					if (selectionType.equals("All Ones")) {
+						fitnessFunction = FitnessType.ALLONES;
+					} else if (selectionType.equals("Consecutive Ones")) {
+						fitnessFunction = FitnessType.ORDEREDONES;
+					} else if (selectionType.equals("All Zeros")) {
+						fitnessFunction = FitnessType.ALLZEROS;
+					} else if (selectionType.equals("Consecutive Zeros")) {
+						fitnessFunction = FitnessType.ORDEREDZEROS;
+					}
 
 					if (evolveType.equals("Elitism")) {
 						numElites = numEliteIndivVal;
@@ -91,7 +105,7 @@ public class EvolutionViewer extends JComponent{
 
 					for (int i = 0; i < numGenerationsVal; i++) {
 						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites,
-								selectionStrategy);
+								selectionStrategy, fitnessFunction);
 					}
 					timer.start();
 					clicked++;

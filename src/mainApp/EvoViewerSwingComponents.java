@@ -45,10 +45,13 @@ public class EvoViewerSwingComponents {
     public JCheckBox terminateAtMaxButton = new JCheckBox(terminateAtMaxText);
 
     private final static String crossoverText = "Crossover?";
-    public static JCheckBox crossoverButton = new JCheckBox(crossoverText);
+    public static JCheckBox crossoverButton = new JCheckBox(crossoverText, true);
 
     private final String[] selectionChoices = { "Truncation", "Roulette", "Rank", "Tournament" };
 	public final JComboBox<String> selectionBox = new JComboBox<>(selectionChoices);
+
+    private final String[] fitnessChoices = { "All Ones", "Consecutive Ones", "All Zeros", "Consecutive Zeros" };
+	public final JComboBox<String> fitnessBox = new JComboBox<>(fitnessChoices);
 
     private final String[] evolveTypes = { "Regular", "Elitism" };
     public final JComboBox<String> evolveTypeBox = new JComboBox<>(evolveTypes);
@@ -88,6 +91,7 @@ public class EvoViewerSwingComponents {
 		inputPanel.add(mutationRateButton);
 		inputPanel.add(numEliteIndivButton);
 		inputPanel.add(selectionBox);
+		inputPanel.add(fitnessBox);
 		inputPanel.add(evolveTypeBox);
 		inputPanel.add(terminateAtMaxButton);
 		inputPanel.add(crossoverButton);
@@ -103,6 +107,7 @@ public class EvoViewerSwingComponents {
         componentToText.put(mutationRateButton, mutationRateText);
         componentToText.put(numEliteIndivButton, numEliteIndiv);
         componentToText.put(selectionBox, "Selection Method");
+        componentToText.put(fitnessBox, "Fitness Function");
         componentToText.put(evolveTypeBox, "Evolution Type");
         componentToText.put(terminateAtMaxButton, terminateAtMaxText);
         componentToText.put(crossoverButton, crossoverText);

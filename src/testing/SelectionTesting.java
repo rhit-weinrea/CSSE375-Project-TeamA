@@ -3,6 +3,7 @@ package testing;
 import org.junit.Test;
 import static org.junit.Assert.*;
 import mainApp.EvolutionLoop;
+import mainApp.EvolutionLoop.FitnessType;
 import mainApp.EvolutionLoop.SelectionType;
 import mainApp.EvolutionComponent;
 
@@ -27,26 +28,26 @@ public class SelectionTesting {
 		
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.TRUNCATION);
+		testComponent.run(false, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
 		int postFitness = testComponent.getLoop().returnAverage();
 		//If the average has increased, then the selection type is working
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.TRUNCATION);
+		testComponent.run(true, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.TRUNCATION);
+		testComponent.run(false, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.TRUNCATION);
+		testComponent.run(true, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 	}
@@ -59,25 +60,25 @@ public class SelectionTesting {
 		
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.RANK);
+		testComponent.run(false, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
 		int postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.RANK);
+		testComponent.run(true, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.RANK);
+		testComponent.run(false, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.RANK);
+		testComponent.run(true, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 	}
@@ -91,25 +92,25 @@ public class SelectionTesting {
 		
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.ROULETTE);
+		testComponent.run(false, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
 		int postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness - 10);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.ROULETTE);
+		testComponent.run(true, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness - 10);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.ROULETTE);
+		testComponent.run(false, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness - 10);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.ROULETTE);
+		testComponent.run(true, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness - 10);
 	}
@@ -122,26 +123,26 @@ public class SelectionTesting {
 		
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.TOURNAMENT);
+		testComponent.run(false, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
 		int postFitness = testComponent.getLoop().returnAverage();
 		//If the average has increased, then the selection type is working
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.TOURNAMENT);
+		testComponent.run(true, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.TOURNAMENT);
+		testComponent.run(false, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 		
 		testComponent.startUp(100, 100);
 		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.TOURNAMENT);
+		testComponent.run(true, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
 		postFitness = testComponent.getLoop().returnAverage();
 		assertTrue(postFitness > preFitness);
 	}

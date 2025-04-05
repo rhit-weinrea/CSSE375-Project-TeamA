@@ -1,10 +1,17 @@
-package mainApp;
+package selectionStrategies;
 
 import java.util.ArrayList;
+
+import fitnessFunctions.FitnessFunction;
+import mainApp.Chromosome;
 
 public class RouletteSelection extends SelectionStrategy {
 
 	
+	public RouletteSelection(FitnessFunction fitness) {
+		super(fitness);
+	}
+
 	@Override
 	public ArrayList<Chromosome> select(ArrayList<Chromosome> curPop) 
 	{
@@ -15,7 +22,7 @@ public class RouletteSelection extends SelectionStrategy {
 		double[] fitnessArray = new double[sortedPop.size()];
 		for(int i = 0; i < sortedPop.size(); i++) 
 		{
-			int fitness = sortedPop.get(i).getFitness();
+			int fitness = super.fitness.fitness(sortedPop.get(i));
 			//System.out.println("fitness is " + fitness + " at array index " + i);
 			fitnessArray[i] = fitness;
 			totalFitness += fitness;

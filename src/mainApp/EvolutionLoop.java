@@ -4,6 +4,15 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 
+import fitnessFunctions.FitnessFunction;
+import fitnessFunctions.allSinglesFitness;
+import fitnessFunctions.orderedFitness;
+import selectionStrategies.RankSelection;
+import selectionStrategies.RouletteSelection;
+import selectionStrategies.SelectionStrategy;
+import selectionStrategies.TournamentSelection;
+import selectionStrategies.TruncationSelection;
+
 public class EvolutionLoop {
 
 	private Chromosome[] population;
@@ -11,6 +20,7 @@ public class EvolutionLoop {
 	private ArrayList<Chromosome> curPop;
 	private int numPop;
 	private SelectionStrategy selectionStrategy;
+	private FitnessFunction fitnessFunction;
 	private ChromosomeOperations cO = new ChromosomeOperations();
 
 	public EvolutionLoop(int numPop, int genomeSize) {
@@ -21,7 +31,9 @@ public class EvolutionLoop {
 		}
 		this.updatedSet = new ArrayList<Chromosome>();
 		this.curPop = new ArrayList<Chromosome>();
-		this.selectionStrategy = new RankSelection(); //Default value
+		this.fitnessFunction = new allSinglesFitness(1);
+		this.selectionStrategy = new RankSelection(fitnessFunction); //Default value
+		
 	}
 	
 	public enum SelectionType 
@@ -31,10 +43,18 @@ public class EvolutionLoop {
 		TOURNAMENT,
 		ROULETTE
 	}
+	
+	public enum FitnessType 
+	{
+		ALLONES,
+		ORDEREDONES,
+		ALLZEROS,
+		ORDEREDZEROS
+	}
 
 	class sortPop implements Comparator<Chromosome> {
 		public int compare(Chromosome c1, Chromosome c2) {
-			return c1.getFitness() - c2.getFitness();
+			return fitnessFunction.fitness(c1) - fitnessFunction.fitness(c2);
 		}
 	}
 
@@ -48,7 +68,7 @@ public class EvolutionLoop {
 		}
 
 		for (int i = 0; i < curPop.size(); i++) {
-			System.out.println(curPop.get(i).getFitness());
+			System.out.println(fitnessFunction.fitness(curPop.get(i)));
 		}
 	}
 	
@@ -56,20 +76,40 @@ public class EvolutionLoop {
 	{
 		if(type == SelectionType.TRUNCATION) 
 		{
-			this.selectionStrategy = new TruncationSelection(numPop);
+			this.selectionStrategy = new TruncationSelection(numPop, this.fitnessFunction);
 		}
 		else if(type == SelectionType.RANK) 
 		{
-			this.selectionStrategy = new RankSelection();
+			this.selectionStrategy = new RankSelection(this.fitnessFunction);
 		}
 		else if(type == SelectionType.ROULETTE) 
 		{
-			this.selectionStrategy = new RouletteSelection();
+			this.selectionStrategy = new RouletteSelection(this.fitnessFunction);
 		}
 		else if(type == SelectionType.TOURNAMENT) 
 		{
-			this.selectionStrategy = new TournamentSelection();
+			this.selectionStrategy = new TournamentSelection(this.fitnessFunction);
 		}
+	}
+	
+	public void changeFitnessType(FitnessType type) {
+		if(type == FitnessType.ALLONES) 
+		{
+			this.fitnessFunction = new allSinglesFitness(1);
+		}
+		else if(type == FitnessType.ORDEREDONES) 
+		{
+			this.fitnessFunction = new orderedFitness('1');
+		}
+		else if(type == FitnessType.ALLZEROS) 
+		{
+			this.fitnessFunction = new allSinglesFitness(0);
+		}
+		else if(type == FitnessType.ORDEREDZEROS) 
+		{
+			this.fitnessFunction = new orderedFitness('0');
+		}
+		this.selectionStrategy.updateFitness(this.fitnessFunction);
 	}
 	
 	public void selection() 
@@ -163,7 +203,7 @@ public class EvolutionLoop {
 	public int returnAverage() {
 		int countForAverage = 0;
 		for (int i = 0; i < curPop.size(); i++) {
-			countForAverage += cO.calculateFitnessV1(curPop.get(i));
+			countForAverage += fitnessFunction.fitness(curPop.get(i));
 		}
 		int average = countForAverage / curPop.size();
 		System.out.println("Average: " + average);
@@ -174,8 +214,9 @@ public class EvolutionLoop {
 	public int returnHighestAverage() {
 		int highest = Integer.MIN_VALUE;
 		for (int i = 0; i < curPop.size(); i++) {
-			if (curPop.get(i).getFitness() > highest) {
-				highest = cO.calculateFitnessV1(curPop.get(i));
+			int currentFitness = fitnessFunction.fitness(curPop.get(i));
+			if (currentFitness > highest) {
+				highest = currentFitness;
 			}
 		}
 		System.out.println();
@@ -187,12 +228,12 @@ public class EvolutionLoop {
 	public int returnLowestAverage() {
 		int lowest = Integer.MAX_VALUE;
 		for (int i = 0; i < curPop.size(); i++) {
-			if (curPop.get(i).getFitness() < lowest) {
-				lowest = cO.calculateFitnessV1(curPop.get(i));
+			int currentFitness = fitnessFunction.fitness(curPop.get(i));
+			if (currentFitness < lowest) {
+				lowest = currentFitness;
 			}
 
 		}
 		return lowest;
 	}
-
 }

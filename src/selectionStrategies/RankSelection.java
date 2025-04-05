@@ -1,10 +1,17 @@
-package mainApp;
+package selectionStrategies;
 
 import java.util.ArrayList;
+
+import fitnessFunctions.FitnessFunction;
+import mainApp.Chromosome;
 
 public class RankSelection extends SelectionStrategy {
 
 	
+	public RankSelection(FitnessFunction fitness) {
+		super(fitness);
+	}
+
 	@Override
 	public ArrayList<Chromosome> select(ArrayList<Chromosome> curPop) 
 	{
@@ -19,7 +26,7 @@ public class RankSelection extends SelectionStrategy {
 		}
 
 		for (int i = 0; i < newPop.size(); i++) {
-			total += newPop.get(i).getFitness();
+			total += super.fitness.fitness(newPop.get(i));
 			double percentage = (double) i / (double) total;
 			rankPercentSum += percentage;
 			valuesArray[i] = rankPercentSum;

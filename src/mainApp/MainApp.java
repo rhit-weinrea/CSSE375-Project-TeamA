@@ -1,6 +1,5 @@
 package mainApp;
 
-
 public class MainApp {
 
 	public void runApp() {
