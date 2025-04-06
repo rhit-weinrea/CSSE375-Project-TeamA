@@ -32,6 +32,8 @@ public class Chromosome {
 
 	private void initializeCustomChromosome(int[][] geneticCode) {
 		this.geneticCode = geneticCode;
+		this.numberOfArrays = geneticCode.length;
+		this.numberOfGenesInArray = geneticCode[0].length;
 	}
 
 	private void initializeChromosome(int genomeSize) {

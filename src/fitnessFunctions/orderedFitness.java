@@ -12,7 +12,7 @@ public class orderedFitness extends FitnessFunction{
 
 	@Override
 	public int fitness(Chromosome chrom) {
-		int count = 1;
+		int count = 0;
 		String rawGene = chrom.asStringRaw();
 		int i = 0;
 		while (i < rawGene.length() - 1) {
@@ -20,13 +20,6 @@ public class orderedFitness extends FitnessFunction{
 				count++;
 			}
 			i++;
-		}
-		if (rawGene.charAt(rawGene.length() - 2) == gene && rawGene.charAt(rawGene.length() - 1) == gene) {
-			count++;
-		}
-
-		if (count == 1) {
-			return 0;
 		}
 
 		return count;
