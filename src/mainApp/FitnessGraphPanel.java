@@ -41,10 +41,8 @@ public class FitnessGraphPanel extends JComponent {
 		HashMap<Integer, Integer> pointsAve = new HashMap<Integer, Integer>();
 		HashMap<Integer, Integer> pointsLow = new HashMap<Integer, Integer>();
 
-		//// Draws X-axis and tics
 		drawAxis(g2, offsetX, offsetY, tickSize, textOffsetX, scale, textOffsetY);
 
-		// Adds text to graph
 		addLabels(g2, offsetX, offsetY, textOffsetX, textOffsetY);
 
 		if(evolutionComponent != null) {
@@ -62,14 +60,11 @@ public class FitnessGraphPanel extends JComponent {
 		EvolutionLoop evoLoop = evolutionComponent.getLoop();
 		if (highFit.size() > 0 && i < highFit.size()) {
 
-		// Draws horizontal line at max fitness
 			drawMaxFitness(g2, offsetX, offsetY, evoLoop);
-			// Graphs fitness
 			int n = 0;
 			for (int j = 0; j < i; j++) {
 	
 				BasicStroke brush = new BasicStroke(3);
-				System.out.println("painting?");
 				g2.setStroke(brush);
 				g2.setColor(Color.BLACK);
 				g2.drawLine(n + offsetX, offsetY - averageFit.get(j), n + 5 + offsetX, offsetY - averageFit.get(j + 1));

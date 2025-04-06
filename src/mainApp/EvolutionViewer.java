@@ -33,8 +33,93 @@ public class EvolutionViewer extends JComponent{
 	private EvolutionComponent evolutionComponent;
 
 	public EvolutionViewer() {
-		JFrame frame = new JFrame();
 		FitnessGraphPanel graphPanel = new FitnessGraphPanel(evolutionComponent);
+		JFrame frame = setUpFrame(graphPanel);
+
+		Timer timer = setUpTimer(frame, graphPanel);
+
+
+		getViewerSwingComponents().enterButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				clicked++;
+				if (clicked == 1) {
+					getViewerComponents();
+					graphPanel.setComponent(evolutionComponent);
+					evolutionComponent.genSize = numGenerationsVal;
+					evolutionComponent.startUp(populationVal, genomeLengthVal);
+					getInputs();
+					timer.start();
+					clicked++;
+				}
+				else if (clicked % 2 == 1) {
+					timer.stop();
+					getViewerSwingComponents().enterButton.setText("Start");
+				} else {
+					timer.start();
+					getViewerSwingComponents().enterButton.setText("Pause");
+				}
+			}
+
+			private void getInputs() {
+				SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
+				FitnessType fitnessFunction = FitnessType.ALLONES; //Default value
+				int numElites = 0;
+
+				if (selectionType.equals("Truncation")) {
+					selectionStrategy = SelectionType.TRUNCATION;
+				} else if (selectionType.equals("Roulette")) {
+					selectionStrategy = SelectionType.ROULETTE;
+				} else if (selectionType.equals("Rank")) {
+					selectionStrategy = SelectionType.RANK;
+				} else if (selectionType.equals("Tournament")) {
+					selectionStrategy = SelectionType.TOURNAMENT;
+				}
+				
+				if (selectionType.equals("All Ones")) {
+					fitnessFunction = FitnessType.ALLONES;
+				} else if (selectionType.equals("Consecutive Ones")) {
+					fitnessFunction = FitnessType.ORDEREDONES;
+				} else if (selectionType.equals("All Zeros")) {
+					fitnessFunction = FitnessType.ALLZEROS;
+				} else if (selectionType.equals("Consecutive Zeros")) {
+					fitnessFunction = FitnessType.ORDEREDZEROS;
+				}
+
+				if (evolveType.equals("Elitism")) {
+					numElites = numEliteIndivVal;
+				}
+
+				for (int i = 0; i < numGenerationsVal; i++) {
+					evolutionComponent.run(getViewerSwingComponents().crossoverButton.isSelected(), mutationRateVal, numElites,
+							selectionStrategy, fitnessFunction);
+				}
+			}
+
+			private void getViewerComponents() {
+				getViewerSwingComponents().enterButton.setText("Pause");
+				setDefaults(getViewerSwingComponents().componentToText);
+				extractMapValues();
+				selectionType = getViewerSwingComponents().selectionBox.getSelectedItem().toString();
+				fitnessType = getViewerSwingComponents().fitnessBox.getSelectedItem().toString();
+				evolveType = getViewerSwingComponents().evolveTypeBox.getSelectedItem().toString();
+				evolutionComponent = new EvolutionComponent(new EvolutionLoop(numGenerationsVal, genomeLengthVal), populationVal);
+			}
+
+		});
+
+		getViewerSwingComponents().showFittestButton.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				new ChromosomeViewer(evolutionComponent.fittest.get(fitClick), 0.05);
+			}
+		});
+		frame.pack();
+		frame.setVisible(true);
+	}
+
+	private JFrame setUpFrame(FitnessGraphPanel graphPanel) {
+		JFrame frame = new JFrame();
 		frame.add(graphPanel, BorderLayout.CENTER);
 		GridBagLayout grid = new GridBagLayout();
 		JPanel inputPanel = new JPanel();
@@ -42,7 +127,10 @@ public class EvolutionViewer extends JComponent{
 		inputPanel.setPreferredSize(new Dimension(50, 50));
 		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);		
 		initializeTextFieldToDefault();
+		return frame;
+	}
 
+	private Timer setUpTimer(JFrame frame, FitnessGraphPanel graphPanel) {
 		Timer timer = new Timer(DELAY, new ActionListener() {
 			public int ticks = 0;
 
@@ -56,83 +144,12 @@ public class EvolutionViewer extends JComponent{
 						return;
 					}
 				}
-				System.out.println("repainting");
 				frame.repaint();
 				graphPanel.repaint();
 				ticks++;
 			}
 		});
-
-
-		getViewerSwingComponents().enterButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				clicked++;
-				if (clicked == 1) {
-					getViewerSwingComponents().enterButton.setText("Pause");
-					setDefaults(getViewerSwingComponents().componentToText);
-					extractMapValues();
-					selectionType = getViewerSwingComponents().selectionBox.getSelectedItem().toString();
-					fitnessType = getViewerSwingComponents().fitnessBox.getSelectedItem().toString();
-					evolveType = getViewerSwingComponents().evolveTypeBox.getSelectedItem().toString();
-					evolutionComponent = new EvolutionComponent(new EvolutionLoop(numGenerationsVal, genomeLengthVal), populationVal);
-					graphPanel.setComponent(evolutionComponent);
-					evolutionComponent.genSize = numGenerationsVal;
-					evolutionComponent.startUp(populationVal, genomeLengthVal);
-					SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
-					FitnessType fitnessFunction = FitnessType.ALLONES; //Default value
-					int numElites = 0;
-
-					if (selectionType.equals("Truncation")) {
-						selectionStrategy = SelectionType.TRUNCATION;
-					} else if (selectionType.equals("Roulette")) {
-						selectionStrategy = SelectionType.ROULETTE;
-					} else if (selectionType.equals("Rank")) {
-						selectionStrategy = SelectionType.RANK;
-					} else if (selectionType.equals("Tournament")) {
-						selectionStrategy = SelectionType.TOURNAMENT;
-					}
-					
-					if (selectionType.equals("All Ones")) {
-						fitnessFunction = FitnessType.ALLONES;
-					} else if (selectionType.equals("Consecutive Ones")) {
-						fitnessFunction = FitnessType.ORDEREDONES;
-					} else if (selectionType.equals("All Zeros")) {
-						fitnessFunction = FitnessType.ALLZEROS;
-					} else if (selectionType.equals("Consecutive Zeros")) {
-						fitnessFunction = FitnessType.ORDEREDZEROS;
-					}
-
-					if (evolveType.equals("Elitism")) {
-						numElites = numEliteIndivVal;
-					}
-
-					for (int i = 0; i < numGenerationsVal; i++) {
-						evolutionComponent.run(getViewerSwingComponents().crossoverButton.isSelected(), mutationRateVal, numElites,
-								selectionStrategy, fitnessFunction);
-					}
-					timer.start();
-					clicked++;
-				}
-				else if (clicked % 2 == 1) {
-					timer.stop();
-					getViewerSwingComponents().enterButton.setText("Start");
-				} else {
-					timer.start();
-					getViewerSwingComponents().enterButton.setText("Pause");
-				}
-			}
-
-		});
-
-		getViewerSwingComponents().showFittestButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				new ChromosomeViewer(evolutionComponent.fittest.get(fitClick), 0.05);
-			}
-		});
-		frame.pack();
-		frame.setVisible(true);
+		return timer;
 	}
 
 	private void extractMapValues() {

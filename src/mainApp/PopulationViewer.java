@@ -22,6 +22,12 @@ public class PopulationViewer {
 		GridBagLayout grid = new GridBagLayout();
 
 		// Sets up display grid.
+		initializePanel(population, frame, populationPanel, grid);
+
+	}
+
+	private void initializePanel(ArrayList<Chromosome> population, JFrame frame, JPanel populationPanel,
+			GridBagLayout grid) {
 		populationPanel.setLayout(grid);
 		populationPanel
 				.setLayout(new GridLayout((int) (population.get(0).numberOfArrays() * Math.pow(population.size(), 0.5)),
@@ -40,7 +46,6 @@ public class PopulationViewer {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.pack();
 		frame.setVisible(true);
-
 	}
 
 }

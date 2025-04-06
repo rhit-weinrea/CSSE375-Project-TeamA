@@ -14,102 +14,114 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-/**
- * 
- * @author Wynesakia Akamah & Abby Weinreb
- *
- */
+
 
 public class ChromosomeViewer {
 
-	public static final Dimension CHROMOSOME_VIEWER_SIZE = new Dimension(500, 500);
-	private double rateInput;
+    public static final Dimension CHROMOSOME_VIEWER_SIZE = new Dimension(500, 500);
+    private double rateInput;
 
-	JFrame frame = new JFrame();
-	JPanel chromosomePanel = new JPanel();
-	JPanel buttonPanel = new JPanel();
-	JButton mutateButton = new JButton("Mutate");
-	JButton loadButton = new JButton("Load");
-	JButton saveButton = new JButton("Save");
-	JButton enterRateButton = new JButton("Enter");
+    JFrame frame = new JFrame();
+    JPanel chromosomePanel = new JPanel();
+    JPanel buttonPanel = new JPanel();
+    JButton mutateButton = new JButton("Mutate");
+    JButton loadButton = new JButton("Load");
+    JButton saveButton = new JButton("Save");
+    JButton enterRateButton = new JButton("Enter");
 
-	/**
-	 * This is the constructor of ChromosomeViewer which allows chromosomes defined
-	 * by the program to be displayed.
-	 *
-	 */
-	public ChromosomeViewer(Chromosome inputChromosome, double mutationRate) {
-		Chromosome chromosome;
-		if(inputChromosome == null){
-			chromosome = getTypedChromosome();
-		}
-		else{
-			chromosome = inputChromosome;
-		}
-		this.rateInput = mutationRate;
+    /**
+     * This is the constructor of ChromosomeViewer which allows chromosomes defined
+     * by the program to be displayed.
+     *
+     */
+    public ChromosomeViewer(Chromosome inputChromosome, double mutationRate) {
+        Chromosome chromosome = initializeChromosome(inputChromosome);
+        this.rateInput = mutationRate;
 
-		JLabel label = new JLabel("Enter Mutation Rate  ");
+        JLabel label = new JLabel("Enter Mutation Rate  ");
+        setupGridLayout();
+        initializeChromosomePanel(chromosome);
+        JTextField rateInputBox = createRateInputBox();
+        setupButtonPanel(label, rateInputBox);
+        setupFrame();
 
-		GridBagLayout grid = new GridBagLayout();
+        // Set up button functionality
+        setupButtonListeners(label, rateInputBox, chromosome);
+    }
 
-		// Sets up display grid.
-		buttonPanel.setLayout(grid);
-		chromosomePanel.setLayout(new GridLayout(chromosome.numberOfArrays(), chromosome.numberOfGenesInArray()));
+    private Chromosome initializeChromosome(Chromosome inputChromosome) {
+        if (inputChromosome == null) {
+            return getTypedChromosome();
+        } else {
+            return inputChromosome;
+        }
+    }
 
-		ChromosomeDrawer.drawLongPhenotype(chromosome, chromosomePanel);
+    private void setupGridLayout() {
+        GridBagLayout grid = new GridBagLayout();
+        buttonPanel.setLayout(grid);
+    }
 
-		JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
+    private void initializeChromosomePanel(Chromosome chromosome) {
+        chromosomePanel.setLayout(new GridLayout(chromosome.numberOfArrays(), chromosome.numberOfGenesInArray()));
+        ChromosomeDrawer.drawLongPhenotype(chromosome, chromosomePanel);
+    }
 
-		// ----------------------------------------------------------------------------------------------
-		// Where buttons are given functionality
+    private JTextField createRateInputBox() {
+        JTextField rateInputBox = new JTextField(String.valueOf(this.rateInput), 10);
+        return rateInputBox;
+    }
 
-		MutateListener mutateListener = new MutateListener(chromosome, frame, this.rateInput);
+    private void setupButtonPanel(JLabel label, JTextField rateInputBox) {
+        buttonPanel.add(label);
+        buttonPanel.add(rateInputBox);
+        buttonPanel.add(enterRateButton);
+        buttonPanel.add(mutateButton);
+        buttonPanel.add(loadButton);
+        buttonPanel.add(saveButton);
+    }
 
-		enterRateButton.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				String rateInputString = rateInputBox.getText();
-				System.out.println(rateInputString);
-				rateInput = Double.parseDouble(rateInputString);
-				System.out.println(rateInput);
-				mutateListener.setMutationRate(rateInput);
-				label.setText("Rate entered");
-			}
-		});
+    private void setupFrame() {
+        frame.setSize(CHROMOSOME_VIEWER_SIZE);
+        frame.setTitle("Chromosome Viewer");
+        frame.add(buttonPanel, BorderLayout.SOUTH);
+        frame.add(chromosomePanel, BorderLayout.NORTH);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.pack();
+        frame.setVisible(true);
+    }
 
-		mutateButton.addActionListener(new MutateListener(chromosome, frame, this.rateInput));
-		loadButton.addActionListener(new LoadChromosomeFileListener());
-		saveButton.addActionListener(new SaveChromosomeFileListener());
-		// ----------------------------------------------------------------------------------------------
+    private void setupButtonListeners(JLabel label, JTextField rateInputBox, Chromosome chromosome) {
+        MutateListener mutateListener = new MutateListener(chromosome, frame, this.rateInput);
 
-		buttonPanel.add(label);
-		buttonPanel.add(rateInputBox);
-		buttonPanel.add(enterRateButton);
-		buttonPanel.add(mutateButton);
-		buttonPanel.add(loadButton);
-		buttonPanel.add(saveButton);
-
-		frame.setSize(CHROMOSOME_VIEWER_SIZE);
-		frame.setTitle("Test Chromosome Viewer");
-
-		frame.add(buttonPanel, BorderLayout.SOUTH);
-		frame.add(chromosomePanel, BorderLayout.NORTH);
-
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		frame.pack();
-		frame.setVisible(true);
-	}
-
-	private Chromosome getTypedChromosome(){
-		String filename = JOptionPane.showInputDialog("Enter Chromosome File:");
-		ChromosomeGenerator generatorAtFile = null;
-            try {
-                generatorAtFile = new ChromosomeGenerator(filename);
-            } 
-			catch (FileNotFoundException ex) {
+        enterRateButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                handleEnterRateAction(rateInputBox, label, mutateListener);
             }
-		Chromosome chromosomeAtFile = generatorAtFile.getChromosome();
-		return chromosomeAtFile;
-	}
+        });
 
+        mutateButton.addActionListener(new MutateListener(chromosome, frame, this.rateInput));
+        loadButton.addActionListener(new LoadChromosomeFileListener());
+        saveButton.addActionListener(new SaveChromosomeFileListener());
+    }
+
+    private void handleEnterRateAction(JTextField rateInputBox, JLabel label, MutateListener mutateListener) {
+        String rateInputString = rateInputBox.getText();
+        System.out.println(rateInputString);
+        rateInput = Double.parseDouble(rateInputString);
+        System.out.println(rateInput);
+        mutateListener.setMutationRate(rateInput);
+        label.setText("Rate entered");
+    }
+
+    private Chromosome getTypedChromosome() {
+        String filename = JOptionPane.showInputDialog("Enter Chromosome File:");
+        ChromosomeGenerator generatorAtFile = null;
+        try {
+            generatorAtFile = new ChromosomeGenerator(filename);
+        } catch (FileNotFoundException ex) {
+        }
+        return generatorAtFile.getChromosome();
+    }
 }
