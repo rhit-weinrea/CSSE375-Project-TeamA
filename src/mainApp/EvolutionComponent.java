@@ -42,6 +42,11 @@ public class EvolutionComponent extends JComponent {
 //		//this.image = ImageIO.read(new File("darwin.jpg"));
 //	}
 
+	public EvolutionLoop getEvoLoop() 
+	{
+		return this.evoLoop;
+	}
+	
 	public EvolutionComponent(EvolutionLoop evoLoop2, int populationVal) {
 		// TODO Auto-generated constructor stub
 		this.setPreferredSize(new Dimension(FRAME_WIDTH, STATS_HEIGHT));
@@ -69,16 +74,10 @@ public class EvolutionComponent extends JComponent {
 	{
 		return this.evoLoop;
 	}
-	
-	public EvolutionLoop getEvoLoop() 
-	{
-		return this.evoLoop;
-	}
 
-	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy, FitnessType fitnessFunction) 
-	{
-		evoLoop.changeSelectionStrategy(selectionStrategy);
+	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy, FitnessType fitnessFunction) {
 		evoLoop.changeFitnessType(fitnessFunction);
+		evoLoop.changeSelectionStrategy(selectionStrategy);
 		evoLoop.selection();
 		
 		if(numElites == 0) 

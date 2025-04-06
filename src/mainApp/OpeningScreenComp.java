@@ -27,6 +27,7 @@ public class OpeningScreenComp {
 
 		JButton evolutionViewerButton = new JButton("Evolution Viewer");
 		JButton chromosomeViewerButton = new JButton("Chromosome Viewer");
+		JButton tournamentModeButton = new JButton("Tournament Mode");
 		JButton closeButton = new JButton("Close");
 
 		Container c = frame.getContentPane();
@@ -37,6 +38,7 @@ public class OpeningScreenComp {
 
 		buttonPanel.add(evolutionViewerButton);
 		buttonPanel.add(chromosomeViewerButton);
+		buttonPanel.add(tournamentModeButton);
 		buttonPanel.add(closeButton);
 
 		imagePanel.add(darwin);
@@ -60,6 +62,14 @@ public class OpeningScreenComp {
 				// }
 				new ChromosomeViewer(null, 0);
 			}
+		});
+		
+		tournamentModeButton.addActionListener(new ActionListener() {
+			
+			public void actionPerformed(ActionEvent e) {
+				new TournamentMode();
+			}
+			
 		});
 
 		closeButton.addActionListener(new ActionListener() {

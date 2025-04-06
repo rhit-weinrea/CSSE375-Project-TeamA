@@ -26,20 +26,21 @@ public class EvolutionViewer extends JComponent{
 
 	private String selectionType, evolveType, fitnessType;
 	private EvoViewerSwingComponents viewerSwingComponents;
+	
 
 	private static final int DELAY = 50;
 	private HashMap<JTextField, Integer> componentToDefaultVal = new HashMap<>();
+	private EvolutionComponent evolutionComponent;
 
 	public EvolutionViewer() {
 		JFrame frame = new JFrame();
-		EvolutionComponent newComponent = new EvolutionComponent(new EvolutionLoop(populationVal, genomeLengthVal),
-				populationVal);
+		FitnessGraphPanel graphPanel = new FitnessGraphPanel(evolutionComponent);
+		frame.add(graphPanel, BorderLayout.CENTER);
 		GridBagLayout grid = new GridBagLayout();
 		JPanel inputPanel = new JPanel();
 		inputPanel.setLayout(grid);
 		inputPanel.setPreferredSize(new Dimension(50, 50));
-		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);
-		frame.add(newComponent, BorderLayout.CENTER);
+		viewerSwingComponents = new EvoViewerSwingComponents(frame, inputPanel);		
 		initializeTextFieldToDefault();
 
 		Timer timer = new Timer(DELAY, new ActionListener() {
@@ -50,31 +51,34 @@ public class EvolutionViewer extends JComponent{
 				if (ticks == numGenerationsVal - 1) {
 					return;
 				}
-				if (viewerSwingComponents.terminateAtMaxButton.isSelected()) {
-					if (newComponent.highFit.get(ticks) == (Integer) genomeLengthVal) {
+				if (getViewerSwingComponents().terminateAtMaxButton.isSelected()) {
+					if (evolutionComponent.highFit.get(ticks) == (Integer) genomeLengthVal) {
 						return;
 					}
 				}
+				System.out.println("repainting");
 				frame.repaint();
-				newComponent.repaint();
+				graphPanel.repaint();
 				ticks++;
 			}
 		});
 
 
-		viewerSwingComponents.enterButton.addActionListener(new ActionListener() {
+		getViewerSwingComponents().enterButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				clicked++;
 				if (clicked == 1) {
-					viewerSwingComponents.enterButton.setText("Pause");
-					setDefaults(viewerSwingComponents.componentToText);
+					getViewerSwingComponents().enterButton.setText("Pause");
+					setDefaults(getViewerSwingComponents().componentToText);
 					extractMapValues();
-					selectionType = viewerSwingComponents.selectionBox.getSelectedItem().toString();
-					fitnessType = viewerSwingComponents.fitnessBox.getSelectedItem().toString();
-					evolveType = viewerSwingComponents.evolveTypeBox.getSelectedItem().toString();
-					newComponent.genSize = numGenerationsVal;
-					newComponent.startUp(populationVal, genomeLengthVal);
+					selectionType = getViewerSwingComponents().selectionBox.getSelectedItem().toString();
+					fitnessType = getViewerSwingComponents().fitnessBox.getSelectedItem().toString();
+					evolveType = getViewerSwingComponents().evolveTypeBox.getSelectedItem().toString();
+					evolutionComponent = new EvolutionComponent(new EvolutionLoop(numGenerationsVal, genomeLengthVal), populationVal);
+					graphPanel.setComponent(evolutionComponent);
+					evolutionComponent.genSize = numGenerationsVal;
+					evolutionComponent.startUp(populationVal, genomeLengthVal);
 					SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
 					FitnessType fitnessFunction = FitnessType.ALLONES; //Default value
 					int numElites = 0;
@@ -104,7 +108,7 @@ public class EvolutionViewer extends JComponent{
 					}
 
 					for (int i = 0; i < numGenerationsVal; i++) {
-						newComponent.run(viewerSwingComponents.crossoverButton.isSelected(), mutationRateVal, numElites,
+						evolutionComponent.run(getViewerSwingComponents().crossoverButton.isSelected(), mutationRateVal, numElites,
 								selectionStrategy, fitnessFunction);
 					}
 					timer.start();
@@ -112,19 +116,19 @@ public class EvolutionViewer extends JComponent{
 				}
 				else if (clicked % 2 == 1) {
 					timer.stop();
-					viewerSwingComponents.enterButton.setText("Start");
+					getViewerSwingComponents().enterButton.setText("Start");
 				} else {
 					timer.start();
-					viewerSwingComponents.enterButton.setText("Pause");
+					getViewerSwingComponents().enterButton.setText("Pause");
 				}
 			}
 
 		});
 
-		viewerSwingComponents.showFittestButton.addActionListener(new ActionListener() {
+		getViewerSwingComponents().showFittestButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				new ChromosomeViewer(newComponent.fittest.get(fitClick), 0.05);
+				new ChromosomeViewer(evolutionComponent.fittest.get(fitClick), 0.05);
 			}
 		});
 		frame.pack();
@@ -132,19 +136,19 @@ public class EvolutionViewer extends JComponent{
 	}
 
 	private void extractMapValues() {
-		mutationRateVal = componentToDefaultVal.get(viewerSwingComponents.mutationRateButton);
-		numGenerationsVal = componentToDefaultVal.get(viewerSwingComponents.numGenerationsButton);
-		populationVal = componentToDefaultVal.get(viewerSwingComponents.populationButton);
-		genomeLengthVal = componentToDefaultVal.get(viewerSwingComponents.genomeLengthButton);
-		numEliteIndivVal = componentToDefaultVal.get(viewerSwingComponents.numEliteIndivButton);
+		mutationRateVal = componentToDefaultVal.get(getViewerSwingComponents().mutationRateButton);
+		numGenerationsVal = componentToDefaultVal.get(getViewerSwingComponents().numGenerationsButton);
+		populationVal = componentToDefaultVal.get(getViewerSwingComponents().populationButton);
+		genomeLengthVal = componentToDefaultVal.get(getViewerSwingComponents().genomeLengthButton);
+		numEliteIndivVal = componentToDefaultVal.get(getViewerSwingComponents().numEliteIndivButton);
 	}
 
 	private void initializeTextFieldToDefault() {
-		componentToDefaultVal.put(viewerSwingComponents.mutationRateButton, mutationRateVal);
-		componentToDefaultVal.put(viewerSwingComponents.numGenerationsButton, numGenerationsVal);
-		componentToDefaultVal.put(viewerSwingComponents.populationButton, populationVal);
-		componentToDefaultVal.put(viewerSwingComponents.genomeLengthButton, genomeLengthVal);
-		componentToDefaultVal.put(viewerSwingComponents.numEliteIndivButton, numEliteIndivVal);
+		componentToDefaultVal.put(getViewerSwingComponents().mutationRateButton, mutationRateVal);
+		componentToDefaultVal.put(getViewerSwingComponents().numGenerationsButton, numGenerationsVal);
+		componentToDefaultVal.put(getViewerSwingComponents().populationButton, populationVal);
+		componentToDefaultVal.put(getViewerSwingComponents().genomeLengthButton, genomeLengthVal);
+		componentToDefaultVal.put(getViewerSwingComponents().numEliteIndivButton, numEliteIndivVal);
 	}
 
 	private void setDefaults(HashMap<JComponent, String> componentToText) {
@@ -157,5 +161,9 @@ public class EvolutionViewer extends JComponent{
 				}
 			}
 		}
+	}
+
+	public EvoViewerSwingComponents getViewerSwingComponents() {
+		return viewerSwingComponents;
 	}
 }
