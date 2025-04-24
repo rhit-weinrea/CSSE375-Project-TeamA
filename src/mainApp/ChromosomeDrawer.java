@@ -2,6 +2,8 @@ package mainApp;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -36,7 +38,18 @@ public class ChromosomeDrawer {
 				geneButton.setPreferredSize(new Dimension(chomosomePhenotypeLength, chomosomePhenotypeLength));
 				geneButton.setBackground(backgroundPhenotype);
 				geneButton.addActionListener(
-						new GeneButtonListener(geneButton, PHENOTYPE_OF_0_GENE, PHENOTYPE_OF_1_GENE));
+						new ActionListener() {
+
+							@Override
+							public void actionPerformed(ActionEvent e) {
+								if (geneButton.getBackground().equals(PHENOTYPE_OF_0_GENE)) {
+									geneButton.setBackground(PHENOTYPE_OF_1_GENE);
+								} else {
+									geneButton.setBackground(PHENOTYPE_OF_0_GENE);
+								}
+							}
+							
+						});
 				panel.add(geneButton);
 			}
 		}
