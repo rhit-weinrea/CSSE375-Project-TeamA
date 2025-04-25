@@ -8,6 +8,18 @@ import mainApp.EvolutionLoop.SelectionType;
 import mainApp.EvolutionComponent;
 
 public class SelectionTesting {
+	
+	private class SelectionData
+	{
+		public int preFitness;
+		public int postFitness;
+		
+		public SelectionData(int preFitness, int postFitness) 
+		{
+			this.preFitness = preFitness;
+			this.postFitness = postFitness;
+		}
+	}
 
 	
 	@Test
@@ -20,131 +32,129 @@ public class SelectionTesting {
 		assertTrue(true);
 	}
 	
-	@Test
-	public void TruncationTest() 
+	public SelectionData setupHelper(boolean crossover, int mutate, int numElites, SelectionType type, FitnessType fType) 
 	{
 		EvolutionLoop testLoop = new EvolutionLoop(10, 9);
 		EvolutionComponent testComponent = new EvolutionComponent(testLoop, 0);
-		
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
+		testComponent.run(crossover, mutate, numElites, type, fType);
 		int postFitness = testComponent.getLoop().returnAverage();
+		return new SelectionData(preFitness, postFitness);
+	}
+	
+	@Test
+	public void TruncationTestNoCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
 		//If the average has increased, then the selection type is working
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
+		assertTrue(sData.postFitness > sData.preFitness);
 	}
 	
 	@Test
-	public void RankTest() 
+	public void TruncationTestNoCrossoverElitism() 
 	{
-		EvolutionLoop testLoop = new EvolutionLoop(10, 9);
-		EvolutionComponent testComponent = new EvolutionComponent(testLoop, 0);
-		
-		testComponent.startUp(100, 100);
-		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
-		int postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-	}
-	
-	//Due to the volatile nature of Roulette selection, these tests just make sure the fitness hasn't drastically gone down
-	@Test
-	public void RouletteTest() 
-	{
-		EvolutionLoop testLoop = new EvolutionLoop(10, 9);
-		EvolutionComponent testComponent = new EvolutionComponent(testLoop, 0);
-		
-		testComponent.startUp(100, 100);
-		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
-		int postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness - 10);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness - 10);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness - 10);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness - 10);
+		SelectionData sData = setupHelper(false, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
 	}
 	
 	@Test
-	public void TournamentTest() 
+	public void TruncationTestCrossoverNoElitism() 
 	{
-		EvolutionLoop testLoop = new EvolutionLoop(10, 9);
-		EvolutionComponent testComponent = new EvolutionComponent(testLoop, 0);
-		
-		testComponent.startUp(100, 100);
-		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
-		int postFitness = testComponent.getLoop().returnAverage();
-		//If the average has increased, then the selection type is working
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(false, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
-		
-		testComponent.startUp(100, 100);
-		preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(true, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
-		postFitness = testComponent.getLoop().returnAverage();
-		assertTrue(postFitness > preFitness);
+		SelectionData sData = setupHelper(true, 1, 0, SelectionType.TRUNCATION, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void TruncationTestCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 1, SelectionType.TRUNCATION, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void RankTestNoCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void RankTestNoCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void RankTestCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 0, SelectionType.RANK, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void RankTestCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 1, SelectionType.RANK, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void RouletteTestNoCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
+		//Since Roulette is volatile, just make sure these don't make the fitness notably worse for the time being
+		assertTrue(sData.postFitness > sData.preFitness - 10);
+	}
+	
+	@Test
+	public void RouletteTestNoCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness - 10);
+	}
+	
+	@Test
+	public void RouletteTestCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 0, SelectionType.ROULETTE, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness - 10);
+	}
+	
+	@Test
+	public void RouletteTestCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 1, SelectionType.ROULETTE, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness - 10);
+	}
+	
+	@Test
+	public void TournamentTestNoCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void TournamentTestNoCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(false, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void TournamentTestCrossoverNoElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 0, SelectionType.TOURNAMENT, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
+	}
+	
+	@Test
+	public void TournamentTestCrossoverElitism() 
+	{
+		SelectionData sData = setupHelper(true, 1, 1, SelectionType.TOURNAMENT, FitnessType.ALLONES);
+		assertTrue(sData.postFitness > sData.preFitness);
 	}
 	
 }
