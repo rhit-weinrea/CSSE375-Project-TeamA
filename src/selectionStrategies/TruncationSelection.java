@@ -4,8 +4,11 @@ import java.util.ArrayList;
 
 import fitnessFunctions.FitnessFunction;
 import mainApp.Chromosome;
+import mainApp.EvolutionLoop.SelectionType;
 
 public class TruncationSelection extends SelectionStrategy {
+
+	public SelectionType type = SelectionType.TRUNCATION;
 	
 	private int numPop;
 	

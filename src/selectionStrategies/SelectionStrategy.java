@@ -1,17 +1,18 @@
 package selectionStrategies;
 
+import fitnessFunctions.FitnessFunction;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-
-import fitnessFunctions.FitnessFunction;
 import mainApp.Chromosome;
+import mainApp.EvolutionLoop;
 
 public abstract class SelectionStrategy {
 	
-	FitnessFunction fitness;
+	public FitnessFunction fitness;
+    public EvolutionLoop.SelectionType type;
 	
-	SelectionStrategy(FitnessFunction fitness) {
+	protected SelectionStrategy(FitnessFunction fitness) {
 		this.fitness = fitness;
 	}
 	

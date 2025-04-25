@@ -1,12 +1,13 @@
 package selectionStrategies;
 
-import java.util.ArrayList;
-
 import fitnessFunctions.FitnessFunction;
+import java.util.ArrayList;
 import mainApp.Chromosome;
+import mainApp.EvolutionLoop.SelectionType;
 
 public class RankSelection extends SelectionStrategy {
 
+	public SelectionType type = SelectionType.RANK;
 	
 	public RankSelection(FitnessFunction fitness) {
 		super(fitness);

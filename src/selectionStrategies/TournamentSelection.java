@@ -5,8 +5,11 @@ import java.util.Random;
 
 import fitnessFunctions.FitnessFunction;
 import mainApp.Chromosome;
+import mainApp.EvolutionLoop.SelectionType;
 
 public class TournamentSelection extends SelectionStrategy {
+
+	public SelectionType type = SelectionType.TOURNAMENT;
 	
 	private Random r;
 	

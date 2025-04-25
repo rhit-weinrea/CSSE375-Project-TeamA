@@ -19,9 +19,10 @@ public class EvolutionLoop {
 	private ArrayList<Chromosome> updatedSet;
 	private ArrayList<Chromosome> curPop;
 	private int numPop;
-	private SelectionStrategy selectionStrategy;
-	private FitnessFunction fitnessFunction;
+	public SelectionStrategy selectionStrategy;
+	public FitnessFunction fitnessFunction;
 	private ChromosomeOperations cO = new ChromosomeOperations();
+	private ArrayList<SelectionStrategy> selectionStrategies = new ArrayList<SelectionStrategy>();
 
 	public EvolutionLoop(int numPop, int genomeSize) {
 		this.numPop = numPop;
@@ -33,6 +34,11 @@ public class EvolutionLoop {
 		this.curPop = new ArrayList<Chromosome>();
 		this.fitnessFunction = new allSinglesFitness(1);
 		this.selectionStrategy = new RankSelection(fitnessFunction); //Default value
+
+		this.selectionStrategies.add(new RankSelection(fitnessFunction));
+		this.selectionStrategies.add(new RouletteSelection(fitnessFunction));
+		this.selectionStrategies.add(new TournamentSelection(fitnessFunction));
+		this.selectionStrategies.add(new TruncationSelection(numPop, fitnessFunction));
 		
 	}
 	
@@ -74,21 +80,13 @@ public class EvolutionLoop {
 	
 	public void changeSelectionStrategy(SelectionType type) 
 	{
-		if(type == SelectionType.TRUNCATION) 
+		for(SelectionStrategy strategy : selectionStrategies) 
 		{
-			this.selectionStrategy = new TruncationSelection(numPop, this.fitnessFunction);
-		}
-		else if(type == SelectionType.RANK) 
-		{
-			this.selectionStrategy = new RankSelection(this.fitnessFunction);
-		}
-		else if(type == SelectionType.ROULETTE) 
-		{
-			this.selectionStrategy = new RouletteSelection(this.fitnessFunction);
-		}
-		else if(type == SelectionType.TOURNAMENT) 
-		{
-			this.selectionStrategy = new TournamentSelection(this.fitnessFunction);
+			if(strategy.type == type) 
+			{
+				this.selectionStrategy = strategy;
+				break;
+			}
 		}
 	}
 	

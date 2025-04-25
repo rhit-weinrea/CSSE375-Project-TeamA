@@ -21,7 +21,7 @@ public class EvolutionComponent extends JComponent {
 	private static final int FRAME_WIDTH = 1800;
 	public static final int STATS_HEIGHT = 200;
 	public static final int SIDE_OFFSET = 100;
-	private EvolutionLoop evoLoop;
+	public EvolutionLoop evoLoop;
 	public int genSize;
 	public int i;
 	public Chromosome fittestChrom;
