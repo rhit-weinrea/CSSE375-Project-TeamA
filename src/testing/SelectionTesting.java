@@ -20,7 +20,6 @@ public class SelectionTesting {
 			this.postFitness = postFitness;
 		}
 	}
-
 	
 	@Test
 	public void ConstructionTest() 
