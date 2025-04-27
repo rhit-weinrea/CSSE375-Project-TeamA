@@ -6,6 +6,7 @@ import mainApp.EvolutionLoop;
 import mainApp.EvolutionLoop.FitnessType;
 import mainApp.EvolutionLoop.SelectionType;
 import mainApp.EvolutionComponent;
+import mainApp.EvolutionInputs;
 
 public class SelectionTesting {
 	
@@ -37,7 +38,13 @@ public class SelectionTesting {
 		EvolutionComponent testComponent = new EvolutionComponent(testLoop, 0);
 		testComponent.startUp(100, 100);
 		int preFitness = testComponent.getLoop().returnAverage();
-		testComponent.run(crossover, mutate, numElites, type, fType);
+		EvolutionInputs inputs = new EvolutionInputs();
+		inputs.setCrossoverOption(crossover);
+		inputs.setMutate(mutate);
+		inputs.setFitnessFunction(fType);
+		inputs.setSelectionStrategy(type);
+		inputs.setNumElites(numElites);
+		testComponent.run(inputs);
 		int postFitness = testComponent.getLoop().returnAverage();
 		return new SelectionData(preFitness, postFitness);
 	}
