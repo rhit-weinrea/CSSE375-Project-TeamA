@@ -32,12 +32,10 @@ public class EvolutionComponent extends JComponent {
 	public ArrayList<Integer> lowFit;
 	public ArrayList<Chromosome> fittest;
 
-
-	public EvolutionLoop getEvoLoop() 
-	{
+	public EvolutionLoop getEvoLoop() {
 		return this.evoLoop;
 	}
-	
+
 	public EvolutionComponent(EvolutionLoop evoLoop2, int populationVal) {
 		// TODO Auto-generated constructor stub
 		this.setPreferredSize(new Dimension(FRAME_WIDTH, STATS_HEIGHT));
@@ -60,53 +58,42 @@ public class EvolutionComponent extends JComponent {
 		evoLoop.createPop();
 
 	}
-	
-	public EvolutionLoop getLoop() 
-	{
+
+	public EvolutionLoop getLoop() {
 		return this.evoLoop;
 	}
 
-	public void run(boolean crossoverOption, int mutate, int numElites, SelectionType selectionStrategy, FitnessType fitnessFunction) {
-		evoLoop.changeFitnessType(fitnessFunction);
-		evoLoop.changeSelectionStrategy(selectionStrategy);
+	public void run(EvolutionInputs inputs) {
+		evoLoop.changeFitnessType(inputs.getFitnessFunction());
+		evoLoop.changeSelectionStrategy(inputs.getSelectionStrategy());
 		evoLoop.selection();
-		
-		if(numElites == 0) 
-		{
-			runNoElitism(crossoverOption, mutate);
+
+		if (inputs.getNumElites() == 0) {
+			runNoElitism(inputs.isCrossoverOption(), inputs.getMutate());
+		} else {
+			runElitism(inputs.isCrossoverOption(), inputs.getMutate(), inputs.getNumElites());
 		}
-		else 
-		{
-			runElitism(crossoverOption, mutate, numElites);
-		}
+
 		this.highFit.add(evoLoop.returnHighestAverage());
 		this.averageFit.add(evoLoop.returnAverage());
 		this.lowFit.add(evoLoop.returnLowestAverage());
 		this.fittest.add(evoLoop.returnFittest());
 	}
-	
-	public void runNoElitism(boolean crossoverOption, int mutate) 
-	{
-		if (crossoverOption) 
-		{
+
+	public void runNoElitism(boolean crossoverOption, int mutate) {
+		if (crossoverOption) {
 			evoLoop.flipMutation(mutate);
-		}
-		else
-		{
+		} else {
 			evoLoop.crossoverMutation(50);
 		}
 	}
-	
-	public void runElitism(boolean crossoverOption, int mutate, int numElites) 
-	{
-		if (crossoverOption) 
-		{
+
+	public void runElitism(boolean crossoverOption, int mutate, int numElites) {
+		if (crossoverOption) {
 			evoLoop.crossoverMutation(50);
 		}
-		
+
 		evoLoop.elitism(mutate, numElites);
 	}
-
-
 
 }

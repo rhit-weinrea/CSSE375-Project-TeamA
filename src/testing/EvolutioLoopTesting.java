@@ -14,20 +14,25 @@ import testing.Mocks.TestingSelectionStrategy;
 
 public class EvolutioLoopTesting {
 	
+	private EvolutionLoop createTestLoop() {
+	    EvolutionLoop loop = new EvolutionLoop(10, 0);
+	    loop.createPop();
+	    return loop;
+	}
+	
 	@Test
 	public void ConstructionTest() {
-		EvolutionLoop EL = new EvolutionLoop(10, 9);
-		EL.createPop();
-		EL.changeSelectionStrategy(SelectionType.RANK);
-		EL.selection();
-		EL.returnFittest();
-		assertTrue(true);
+	    EvolutionLoop EL = new EvolutionLoop(10, 9);
+	    EL.createPop();
+	    EL.changeSelectionStrategy(SelectionType.RANK);
+	    EL.selection();
+	    Chromosome fittest = EL.returnFittest();
+	    assertTrue(fittest != null); 
 	}
 
 	@Test
 	public void testReturnLowestAverage(){
-		EvolutionLoop loop = new EvolutionLoop(10, 0);
-		loop.createPop();
+		EvolutionLoop loop = createTestLoop();
 		loop.fitnessFunction = new TestingFitnessFunction();
 
 		int result = loop.returnLowestAverage();
@@ -37,8 +42,7 @@ public class EvolutioLoopTesting {
 
 	@Test
 	public void testReturnHighestAverage(){
-		EvolutionLoop loop = new EvolutionLoop(10, 0);
-		loop.createPop();
+		EvolutionLoop loop = createTestLoop();
 		loop.fitnessFunction = new TestingFitnessFunction();
 
 		int result = loop.returnHighestAverage();
@@ -48,8 +52,7 @@ public class EvolutioLoopTesting {
 
 	@Test
 	public void testReturnAverage(){
-		EvolutionLoop loop = new EvolutionLoop(10, 0);
-		loop.createPop();
+		EvolutionLoop loop = createTestLoop();
 		loop.fitnessFunction = new TestingFitnessFunction();
 
 		int result = loop.returnAverage();
@@ -59,8 +62,7 @@ public class EvolutioLoopTesting {
 
 	@Test
 	public void testSelection(){
-		EvolutionLoop loop = new EvolutionLoop(10, 0);
-		loop.createPop();
+		EvolutionLoop loop = createTestLoop();
 		TestingSelectionStrategy dummySelect = new TestingSelectionStrategy(new TestingFitnessFunction());
 		loop.selectionStrategy = dummySelect;
 

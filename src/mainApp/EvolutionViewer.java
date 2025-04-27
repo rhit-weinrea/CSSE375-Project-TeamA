@@ -62,10 +62,11 @@ public class EvolutionViewer extends JComponent{
 			}
 
 			private void getInputs() {
+				EvolutionInputs inputs = new EvolutionInputs();
 				SelectionType selectionStrategy = SelectionType.TRUNCATION; // Default value
 				FitnessType fitnessFunction = FitnessType.ALLONES; //Default value
 				int numElites = 0;
-
+				
 				if (selectionType.equals("Truncation")) {
 					selectionStrategy = SelectionType.TRUNCATION;
 				} else if (selectionType.equals("Roulette")) {
@@ -75,6 +76,7 @@ public class EvolutionViewer extends JComponent{
 				} else if (selectionType.equals("Tournament")) {
 					selectionStrategy = SelectionType.TOURNAMENT;
 				}
+				inputs.setSelectionStrategy(selectionStrategy);
 				
 				if (selectionType.equals("All Ones")) {
 					fitnessFunction = FitnessType.ALLONES;
@@ -85,14 +87,17 @@ public class EvolutionViewer extends JComponent{
 				} else if (selectionType.equals("Consecutive Zeros")) {
 					fitnessFunction = FitnessType.ORDEREDZEROS;
 				}
+				inputs.setFitnessFunction(fitnessFunction);
 
 				if (evolveType.equals("Elitism")) {
 					numElites = numEliteIndivVal;
 				}
-
+				inputs.setNumElites(numElites);
+				inputs.setCrossoverOption(getViewerSwingComponents().crossoverButton.isSelected());
+				inputs.setMutate(mutationRateVal);
+		
 				for (int i = 0; i < numGenerationsVal; i++) {
-					evolutionComponent.run(getViewerSwingComponents().crossoverButton.isSelected(), mutationRateVal, numElites,
-							selectionStrategy, fitnessFunction);
+					evolutionComponent.run(inputs);
 				}
 			}
 
