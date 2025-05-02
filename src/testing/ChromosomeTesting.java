@@ -61,4 +61,20 @@ public class ChromosomeTesting {
         int[][] actual = testChromosome.geneticCode();
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void testAsString(){
+        Chromosome testChromosome = new Chromosome(new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 0, 1}});
+
+        String expected = "Genetic Code: 0 1 0 \n              0 1 1 \n              0 0 1 \n              ";
+
+        assertEquals(expected, testChromosome.asString());
+    }
+
+    @Test
+    public void testNumberOfGenes(){
+        Chromosome testChromosome = new Chromosome(new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 0, 1}});
+
+        assertEquals(9, testChromosome.numberOfGenes());
+    }
 }   
