@@ -4,7 +4,7 @@ import mainApp.Chromosome;
 
 public class orderedFitness extends FitnessFunction{
 	
-	char gene;
+	public char gene;
 	
 	public orderedFitness(char input) {
 		gene = input;
