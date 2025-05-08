@@ -13,7 +13,8 @@
   </dependencies>
   <name>GARP</name>
   <build>
-    <sourceDirectory>src</sourceDirectory>
+    <sourceDirectory>src/mainApp</sourceDirectory>
+    <testSourceDirectory>src/testing</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
