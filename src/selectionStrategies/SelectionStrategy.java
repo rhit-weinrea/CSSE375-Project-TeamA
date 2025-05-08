@@ -6,14 +6,16 @@ import java.util.Collections;
 import mainApp.Chromosome;
 import mainApp.EvolutionLoop;
 import mainApp.PopulationSorter;
+import mainApp.EvolutionLoop.SelectionType;
 
 public abstract class SelectionStrategy{
 	
 	public FitnessFunction fitness;
     public EvolutionLoop.SelectionType type;
 	
-	protected SelectionStrategy(FitnessFunction fitness) {
+	protected SelectionStrategy(FitnessFunction fitness, SelectionType type) {
 		this.fitness = fitness;
+		this.type = type;
 	}
 	
 	public ArrayList<Chromosome> select(ArrayList<Chromosome> curPop) 

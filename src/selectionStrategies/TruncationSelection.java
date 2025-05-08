@@ -7,14 +7,12 @@ import mainApp.Chromosome;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class TruncationSelection extends SelectionStrategy {
-
-	public SelectionType type = SelectionType.TRUNCATION;
 	
 	private int numPop;
 	
 	public TruncationSelection(int numPop, FitnessFunction fitness) 
 	{
-		super(fitness);
+		super(fitness, SelectionType.TRUNCATION);
 		this.numPop = numPop;
 	}
 	

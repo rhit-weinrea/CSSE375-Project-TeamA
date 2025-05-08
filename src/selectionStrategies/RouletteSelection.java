@@ -7,11 +7,9 @@ import mainApp.Chromosome;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class RouletteSelection extends SelectionStrategy {
-
-	public SelectionType type = SelectionType.ROULETTE;
 	
 	public RouletteSelection(FitnessFunction fitness) {
-		super(fitness);
+		super(fitness, SelectionType.ROULETTE);
 	}
 
 	@Override

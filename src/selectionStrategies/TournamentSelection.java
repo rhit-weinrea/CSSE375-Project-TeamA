@@ -8,14 +8,12 @@ import mainApp.Chromosome;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class TournamentSelection extends SelectionStrategy {
-
-	public SelectionType type = SelectionType.TOURNAMENT;
 	
 	private Random r;
 	
 	public TournamentSelection(FitnessFunction fitness) 
 	{
-		super(fitness);
+		super(fitness, SelectionType.TOURNAMENT);
 		this.r = new Random();
 	}
 	
