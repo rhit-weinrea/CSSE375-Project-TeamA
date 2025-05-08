@@ -88,4 +88,19 @@ public class ChromosomeTesting {
         assertFalse(testChromosome.geneticCode().equals(mutatedChromosome.geneticCode()));
     }
     
+    @Test
+    public void testChromosomeMutation(){
+        Chromosome testChromosome = new Chromosome(new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 0, 1}});
+        int[][] geneticCode = testChromosome.geneticCode();
+        testChromosome.mutate3(100);
+        int[][] newGeneticCode = testChromosome.geneticCode();
+
+        assertFalse(geneticCode.equals(newGeneticCode));
+    }
+    
+    @Test
+    public void testChromosomeFailsInitialization(){
+    	assertThrows(IllegalArgumentException.class, () -> new Chromosome(5));
+    }
+    
 }   

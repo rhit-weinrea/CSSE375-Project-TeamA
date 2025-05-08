@@ -127,7 +127,7 @@ public class Chromosome {
 	}
 
 	public void mutate3(int n) {
-		cO.mutate3(this, n);
+		this.geneticCode = cO.mutate3(this, n);
 	}
 
 }
