@@ -87,4 +87,5 @@ public class ChromosomeTesting {
 
         assertFalse(testChromosome.geneticCode().equals(mutatedChromosome.geneticCode()));
     }
+    
 }   
