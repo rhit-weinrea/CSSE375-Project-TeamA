@@ -32,10 +32,6 @@ public class EvolutionComponent extends JComponent {
 	public ArrayList<Integer> lowFit;
 	public ArrayList<Chromosome> fittest;
 
-	public EvolutionLoop getEvoLoop() {
-		return this.evoLoop;
-	}
-
 	public EvolutionComponent(EvolutionLoop evoLoop2, int populationVal) {
 		// TODO Auto-generated constructor stub
 		this.setPreferredSize(new Dimension(FRAME_WIDTH, STATS_HEIGHT));
@@ -45,11 +41,6 @@ public class EvolutionComponent extends JComponent {
 		this.highFit = new ArrayList<Integer>();
 		this.fittest = new ArrayList<Chromosome>();
 		this.i = 0;
-	}
-
-	public void setUpLoop(int numPop, int genomeSize) {
-		this.evoLoop = new EvolutionLoop(numPop, genomeSize);
-
 	}
 
 	// Adds values from evolution loop

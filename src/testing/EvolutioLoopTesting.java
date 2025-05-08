@@ -5,6 +5,7 @@ import mainApp.Chromosome;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import mainApp.EvolutionLoop;
@@ -70,5 +71,31 @@ public class EvolutioLoopTesting {
 
 		assertEquals(true, dummySelect.wasCalled);
 	}	
+	
+	@Test
+	public void testGeneSize() {
+	    EvolutionLoop EL = new EvolutionLoop(10, 9);
+	    assertEquals(9, EL.returnGeneSize()); 
+	}
+	
+	@Test
+	public void testLoopElitismWithNoChange() {
+	    EvolutionLoop EL = new EvolutionLoop(10, 9);
+	    EL.createPop();
+	    Chromosome fittest = EL.returnFittest();
+	    EL.elitism(0, 10);
+	    Chromosome newFittest = EL.returnFittest();
+	    assertEquals(fittest.geneticCode(), newFittest.geneticCode()); 
+	}
+	
+	@Test
+	public void testLoopElitismWithChange() {
+	    EvolutionLoop EL = new EvolutionLoop(10, 9);
+	    EL.createPop();
+	    Chromosome fittest = EL.returnFittest();
+	    EL.elitism(0, 5);
+	    Chromosome newFittest = EL.returnFittest();
+	    assertFalse(fittest.geneticCode().equals(newFittest.geneticCode())); 
+	}
 
 }

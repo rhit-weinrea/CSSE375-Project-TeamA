@@ -6,11 +6,9 @@ import mainApp.Chromosome;
 import mainApp.EvolutionLoop.SelectionType;
 
 public class RankSelection extends SelectionStrategy {
-
-	public SelectionType type = SelectionType.RANK;
 	
 	public RankSelection(FitnessFunction fitness) {
-		super(fitness);
+		super(fitness, SelectionType.RANK);
 	}
 
 	@Override
