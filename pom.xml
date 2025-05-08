@@ -13,7 +13,7 @@
   </dependencies>
   <name>GARP</name>
   <build>
-    <sourceDirectory>src/mainApp</sourceDirectory>
+    <sourceDirectory>src/mainApp, src/fitnessFuctions, src/selectionStrategies</sourceDirectory>
     <testSourceDirectory>src/testing</testSourceDirectory>
     <plugins>
       <plugin>
