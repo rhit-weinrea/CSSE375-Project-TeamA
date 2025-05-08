@@ -5,6 +5,7 @@ import org.junit.Before;
 
 import mainApp.Chromosome;
 import mainApp.ChromosomeGenerator;
+import mainApp.ChromosomeOperations;
 
 import java.io.*;
 import java.nio.file.*;
@@ -76,5 +77,14 @@ public class ChromosomeTesting {
         Chromosome testChromosome = new Chromosome(new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 0, 1}});
 
         assertEquals(9, testChromosome.numberOfGenes());
+    }
+    
+    @Test
+    public void testMutatedOffspringMutates(){
+        Chromosome testChromosome = new Chromosome(new int[][]{{0, 1, 0}, {0, 1, 1}, {0, 0, 1}});
+        ChromosomeOperations cO = new ChromosomeOperations();
+        Chromosome mutatedChromosome = cO.mutatedOffspring(testChromosome, 9);
+
+        assertFalse(testChromosome.geneticCode().equals(mutatedChromosome.geneticCode()));
     }
 }   

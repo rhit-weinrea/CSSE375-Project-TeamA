@@ -31,7 +31,14 @@ public class Chromosome {
 	}
 
 	private void initializeCustomChromosome(int[][] geneticCode) {
-		this.geneticCode = geneticCode;
+		this.geneticCode = new int[geneticCode.length][geneticCode[0].length];
+		for(int i = 0; i < geneticCode.length; i++) 
+		{
+			for(int j = 0; j < geneticCode[0].length; j++) 
+			{
+				this.geneticCode[i][j] = geneticCode[i][j];
+			}
+		}
 		this.numberOfArrays = geneticCode.length;
 		this.numberOfGenesInArray = geneticCode[0].length;
 	}
