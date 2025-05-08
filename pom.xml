@@ -13,8 +13,8 @@
   </dependencies>
   <name>GARP</name>
   <build>
-    <sourceDirectory>src/mainApp, src/fitnessFuctions, src/selectionStrategies</sourceDirectory>
-    <testSourceDirectory>src/testing</testSourceDirectory>
+    <sourceDirectory>src/mainApp/java, src/fitnessFuctions/java, src/selectionStrategies/java</sourceDirectory>
+    <testSourceDirectory>src/testing/java</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
