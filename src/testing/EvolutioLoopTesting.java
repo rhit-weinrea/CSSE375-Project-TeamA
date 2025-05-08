@@ -70,5 +70,11 @@ public class EvolutioLoopTesting {
 
 		assertEquals(true, dummySelect.wasCalled);
 	}	
+	
+	@Test
+	public void testGeneSize() {
+	    EvolutionLoop EL = new EvolutionLoop(10, 9);
+	    assertEquals(9, EL.returnGeneSize()); 
+	}
 
 }

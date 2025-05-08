@@ -41,6 +41,8 @@ public class EvolutionLoop {
 		this.selectionStrategies.add(new RouletteSelection(fitnessFunction));
 		this.selectionStrategies.add(new TournamentSelection(fitnessFunction));
 		this.selectionStrategies.add(new TruncationSelection(numPop, fitnessFunction));
+		System.out.println("rechecking");
+		System.out.println(selectionStrategies.get(0).type);
 		
 	}
 	
