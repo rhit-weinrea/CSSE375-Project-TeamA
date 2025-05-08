@@ -8,6 +8,8 @@ import fitnessFunctions.FitnessFunction;
 import fitnessFunctions.allSinglesFitness;
 import fitnessFunctions.orderedFitness;
 import mainApp.Chromosome;
+import mainApp.EvolutionLoop;
+import mainApp.EvolutionLoop.FitnessType;
 
 public class FitnessTesting {
 	
@@ -153,5 +155,45 @@ public class FitnessTesting {
 		geneticCode[1][0] = 1;
 		Chromosome crom = new Chromosome(geneticCode);
 		assertEquals(1, f1.fitness(crom));
+	}
+	
+	@Test
+	public void addAllOnesFitnessType() {
+		EvolutionLoop loop = new EvolutionLoop(10, 100);
+		
+		loop.changeFitnessType(FitnessType.ALLONES);
+	
+		allSinglesFitness test = (allSinglesFitness) loop.fitnessFunction;
+		assertEquals(1, test.gene);
+	}
+	
+	@Test
+	public void addOrderedOnesFitnessType() {
+		EvolutionLoop loop = new EvolutionLoop(10, 100);
+		
+		loop.changeFitnessType(FitnessType.ORDEREDONES);
+	
+		orderedFitness test = (orderedFitness) loop.fitnessFunction;
+		assertEquals('1', test.gene);
+	}
+	
+	@Test
+	public void addAllZerosFitnessType() {
+		EvolutionLoop loop = new EvolutionLoop(10, 100);
+		
+		loop.changeFitnessType(FitnessType.ALLZEROS);
+	
+		allSinglesFitness test = (allSinglesFitness) loop.fitnessFunction;
+		assertEquals(0, test.gene);
+	}
+	
+	@Test
+	public void addOrderedZerosFitnessType() {
+		EvolutionLoop loop = new EvolutionLoop(10, 100);
+		
+		loop.changeFitnessType(FitnessType.ORDEREDZEROS);
+	
+		orderedFitness test = (orderedFitness) loop.fitnessFunction;
+		assertEquals('0', test.gene);
 	}
 }

@@ -4,7 +4,7 @@ import mainApp.Chromosome;
 
 public class allSinglesFitness extends FitnessFunction{
 	
-	int gene;
+	public int gene;
 	
 	public allSinglesFitness(int input) {
 		gene = input;
