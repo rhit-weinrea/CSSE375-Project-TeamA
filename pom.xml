@@ -4,17 +4,18 @@
   <artifactId>F23-R-302</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <dependencies>
-  	<dependency>
-	  <groupId>junit</groupId>
-	  <artifactId>junit-dep</artifactId>
-	  <version>4.8.2</version>
-	  <scope>test</scope>
+  	<!-- https://mvnrepository.com/artifact/junit/junit -->
+	<dependency>
+	    <groupId>junit</groupId>
+	    <artifactId>junit</artifactId>
+	    <version>4.13.2</version>
+	    <scope>test</scope>
 	</dependency>
   </dependencies>
   <name>GARP</name>
   <build>
-    <sourceDirectory>src/mainApp/java, src/fitnessFuctions/java, src/selectionStrategies/java</sourceDirectory>
-    <testSourceDirectory>src/testing/java</testSourceDirectory>
+    <sourceDirectory>src</sourceDirectory>
+    <testSourceDirectory>test</testSourceDirectory>
     <plugins>
       <plugin>
         <artifactId>maven-compiler-plugin</artifactId>
@@ -23,6 +24,16 @@
           <release>17</release>
         </configuration>
       </plugin>
+      <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-surefire-plugin</artifactId>
+          <version>3.5.3</version>
+	          <configuration>
+	          	<includes>
+	          		<include>**/*.java</include>
+	          	</includes>
+	          </configuration>
+        </plugin>
     </plugins>
   </build>
 </project>
