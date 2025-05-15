@@ -42,7 +42,9 @@ public class SelectionTesting {
 		inputs.setCrossoverOption(crossover);
 		inputs.setMutate(mutate);
 		inputs.setFitnessFunction(fType);
+		System.out.println(inputs.getSelectionStrategy());
 		inputs.setSelectionStrategy(type);
+		System.out.println(inputs.getSelectionStrategy());
 		inputs.setNumElites(numElites);
 		testComponent.run(inputs);
 		int postFitness = testComponent.getLoop().returnAverage();
