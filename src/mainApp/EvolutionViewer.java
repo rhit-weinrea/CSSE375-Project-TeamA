@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
@@ -142,13 +143,25 @@ public class EvolutionViewer extends JComponent{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (ticks == numGenerationsVal - 1) {
-					return;
+					((Timer) arg0.getSource()).stop();
+					//return;
 				}
 				if (getViewerSwingComponents().terminateAtMaxButton.isSelected()) {
-					if (evolutionComponent.highFit.get(ticks) == (Integer) genomeLengthVal) {
-						return;
-					}
+				    if (evolutionComponent.highFit.get(ticks) == genomeLengthVal - 1) {
+
+
+				        JOptionPane.showMessageDialog(
+				            frame,
+				            "Max fitness reached at generation: " + ticks,
+				            "Done!",
+				            JOptionPane.INFORMATION_MESSAGE
+				        );
+
+				        ((Timer) arg0.getSource()).stop(); // optional, to stop ticking
+				        return;
+				    }
 				}
+
 				frame.repaint();
 				graphPanel.repaint();
 				ticks++;
