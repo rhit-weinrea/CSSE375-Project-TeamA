@@ -116,9 +116,10 @@ public class ChromosomeViewer {
     }
 
     private Chromosome getTypedChromosome() {
+        String filename = JOptionPane.showInputDialog("Enter Chromosome File:");
         ChromosomeGenerator generatorAtFile = null;
         try {
-            generatorAtFile = new ChromosomeGenerator();
+            generatorAtFile = new ChromosomeGenerator(filename);
         } catch (FileNotFoundException ex) {
         }
         return generatorAtFile.getChromosome();

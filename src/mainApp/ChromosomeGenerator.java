@@ -1,12 +1,8 @@
 package mainApp;
 
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
-
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 
 public class ChromosomeGenerator {
@@ -26,31 +22,6 @@ public class ChromosomeGenerator {
         this.translatedChromosome = parseRawGeneticCode(rawGeneticCode);
     }
 
-    public ChromosomeGenerator() throws FileNotFoundException {
-        JFileChooser fileChooser = new JFileChooser();
-        fileChooser.setDialogTitle("Select Chromosome Text File");
-        fileChooser.setCurrentDirectory(new File("ChromosomesText"));
-        fileChooser.setFileFilter(new FileNameExtensionFilter("Text files", "txt"));
-
-        int result = fileChooser.showOpenDialog(null);
-
-        if (result != JFileChooser.APPROVE_OPTION) {
-            throw new FileNotFoundException("No file selected.");
-        }
-
-        File selectedFile = fileChooser.getSelectedFile();
-        String rawGeneticCode;
-
-        try (Scanner scanner = new Scanner(new FileReader(selectedFile))) {
-            if (!scanner.hasNextLine()) {
-                throw new IllegalArgumentException("The file is empty.");
-            }
-            rawGeneticCode = scanner.nextLine().trim();
-        }
-
-        this.translatedChromosome = parseRawGeneticCode(rawGeneticCode);
-    }
-    
     public Chromosome getChromosome() {
         return translatedChromosome;
     }
