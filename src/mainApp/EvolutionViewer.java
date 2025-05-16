@@ -1,6 +1,7 @@
 package mainApp;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
@@ -8,12 +9,14 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.Timer;
 
+
 import mainApp.EvolutionLoop.FitnessType;
-import mainApp.EvolutionLoop.SelectionType;
+import mainApp.EvolutionLoop.SelectionType; 
 
 public class EvolutionViewer extends JComponent{
 	private int genomeLengthVal = 100;
@@ -31,11 +34,12 @@ public class EvolutionViewer extends JComponent{
 	private static final int DELAY = 50;
 	private HashMap<JTextField, Integer> componentToDefaultVal = new HashMap<>();
 	private EvolutionComponent evolutionComponent;
+	private MakeSound sound = new MakeSound();
 
 	public EvolutionViewer() {
 		FitnessGraphPanel graphPanel = new FitnessGraphPanel(evolutionComponent);
 		JFrame frame = setUpFrame(graphPanel);
-
+		
 		Timer timer = setUpTimer(frame, graphPanel);
 
 
@@ -142,13 +146,25 @@ public class EvolutionViewer extends JComponent{
 			@Override
 			public void actionPerformed(ActionEvent arg0) {
 				if (ticks == numGenerationsVal - 1) {
+					((Timer) arg0.getSource()).stop();
 					return;
 				}
 				if (getViewerSwingComponents().terminateAtMaxButton.isSelected()) {
-					if (evolutionComponent.highFit.get(ticks) == (Integer) genomeLengthVal) {
-						return;
-					}
+				    if (evolutionComponent.highFit.get(ticks) == genomeLengthVal - 1) {
+
+
+				        JOptionPane.showMessageDialog(
+				            frame,
+				            "Max fitness reached at generation: " + ticks,
+				            "Done!",
+				            JOptionPane.INFORMATION_MESSAGE
+				        );
+
+				        ((Timer) arg0.getSource()).stop(); // optional, to stop ticking
+				        return;
+				    }
 				}
+
 				frame.repaint();
 				graphPanel.repaint();
 				ticks++;
@@ -188,4 +204,6 @@ public class EvolutionViewer extends JComponent{
 	public EvoViewerSwingComponents getViewerSwingComponents() {
 		return viewerSwingComponents;
 	}
+
+
 }
